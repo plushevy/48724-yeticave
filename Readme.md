@@ -1,7 +1,7 @@
 # Личный проект «YetiCave»
 
 * Студент: [Илья Молчанов](https://up.htmlacademy.ru/php/8/user/48724).
-* Наставник: `Неизвестно`.
+* Наставник: [Илья Кондрашов](https://htmlacademy.ru/profile/id644427).
 
 ---
 
