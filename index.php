@@ -1,6 +1,19 @@
 <?php
 $is_auth = rand(0, 1);
 
+function formatPrice($num){
+
+    $currency = '₽';
+    $num = ceil($num);
+
+    if ($num >= 1000) {
+        // форматирование числа вида 99 999
+        $num = number_format($num , 0 , "." , " " );
+    }
+
+    return "{$num} {$currency}";
+}
+
 $user_name = 'Илья'; // укажите здесь ваше имя
 
 $categories = array('Доски и лыжи', 'Крепления', 'Ботинки', 'Одежда', 'Инструменты', 'Разное');
@@ -108,7 +121,7 @@ $items = [
                         <div class="lot__state">
                             <div class="lot__rate">
                                 <span class="lot__amount">Стартовая цена</span>
-                                <span class="lot__cost"><?= $item['price']?><b class="rub">р</b></span>
+                                <span class="lot__cost"><?= formatPrice($item['price'])?></span>
                             </div>
                             <div class="lot__timer timer">
                                 12:23
