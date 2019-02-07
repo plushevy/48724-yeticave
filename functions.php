@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * renderTemplate - получение html из шаблона
+ * @param $filename
+ * @param $data
+ * @return false|string
+ */
 function renderTemplate($filename, $data) {
     $filename = 'templates/' . $filename;
     $result = '';
@@ -18,6 +24,11 @@ function renderTemplate($filename, $data) {
 }
 
 
+/**
+ * formatPrice - Форматирование цены
+ * @param $num
+ * @return string
+ */
 function formatPrice($num){
 
     $currency = '₽';
