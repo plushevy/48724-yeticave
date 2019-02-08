@@ -41,3 +41,20 @@ function formatPrice($num){
 
     return "{$num} {$currency}";
 }
+
+/**
+ * showTimeLeft - сколько времени осталось до .. (чч-мм)
+ * @param string $endTime
+ * @return DateInterval
+ */
+function showTimeLeft($endTime = 'tomorrow') {
+
+    date_default_timezone_set('Europe/Moscow');
+
+    $dtNow = date_create('now');
+    $dtEnd = date_create($endTime);
+    $interval = date_diff($dtNow, $dtEnd);
+    $timeLeft = date_interval_format($interval, '%H:%I');
+
+    return $timeLeft;
+}
