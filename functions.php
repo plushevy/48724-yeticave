@@ -45,7 +45,7 @@ function formatPrice($num){
 /**
  * showTimeLeft - сколько времени осталось до .. (чч-мм)
  * @param string $endTime
- * @return DateInterval
+ * @return string
  */
 function showTimeLeft($endTime = 'tomorrow') {
 
