@@ -18,6 +18,7 @@ VALUES
 INSERT INTO lots (dt_add, dt_end, label, description, img_url, start_price, bet_step, id_user, id_category)
 VALUES
   ( '2019-01-15 08:36:32', '2019-02-12 23:59:59', '2014 Rossignol District Snowboard', 'Описание1', 'img/lot-1.jpg', 10999, 100, 1, 1),
+  ( '2019-01-15 08:36:32', '2019-03-12 23:59:59', '2019 Rossignol District Snowboard', 'Описание1232', 'img/lot-1.jpg', 10999, 100, 1, 1),
   ( '2019-01-23 14:50:59', '2019-03-12 23:59:59', 'DC Ply Mens 2016/2017 Snowboard', 'Описание2', 'img/lot-2.jpg', 159999, 150, 2, 1),
   ( '2019-01-22 10:30:59', '2019-03-13 23:59:59', 'Крепления Union Contact Pro 2015 года размер L/XL', 'Описание3', 'img/lot-3.jpg', 8000, 150, 3, 2),
   ( '2019-01-25 17:00:59', '2019-03-14 23:59:59', 'Ботинки для сноуборда DC Mutiny Charocal', 'Описание4', 'img/lot-4.jpg', 10999, 150, 1, 3),
