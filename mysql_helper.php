@@ -9,7 +9,8 @@
  *
  * @return mysqli_stmt Подготовленное выражение
  */
-function prepareStmt($link, $sql, $data = []) {
+function prepareStmt($link, $sql, $data = [])
+{
     $stmt = mysqli_prepare($link, $sql);
 
     if ($data) {
@@ -21,11 +22,9 @@ function prepareStmt($link, $sql, $data = []) {
 
             if (is_int($value)) {
                 $type = 'i';
-            }
-            else if (is_string($value)) {
+            } else if (is_string($value)) {
                 $type = 's';
-            }
-            else if (is_double($value)) {
+            } else if (is_double($value)) {
                 $type = 'd';
             }
 
@@ -46,40 +45,69 @@ function prepareStmt($link, $sql, $data = []) {
 
 /**
  * Получение данных из БД
- * @param $link mysqli Ресурс соединения
+ * @param $link Ресурс соединения mysqli
  * @param $sql string SQL запрос с плейсхолдерами вместо значений
  * @param array $data Данные для вставки на место плейсхолдеров
  * @return array|null
  */
-function dbGetData($link, $sql, $data=[]){
+function dbGetData($link, $sql, $data = [])
+{
     $result = [];
     $stmt = prepareStmt($link, $sql, $data); // подготавливаем выражение
+
+    if (!$stmt) {
+        showError($link);
+    }
+
     mysqli_stmt_execute($stmt);
     $res = mysqli_stmt_get_result($stmt);
 
-    if ($res){
-        $result = mysqli_fetch_all($res, MYSQLI_ASSOC);
+    if (!$res) {
+        showError($link);
     }
+
+    $result = mysqli_fetch_all($res, MYSQLI_ASSOC);
 
     return $result;
 }
 
 /**
  * Добавление записи в БД и получение Id последней записи
- * @param $link mysqli Ресурс соединения
+ * @param $link Ресурс соединения mysqli
  * @param $sql string SQL запрос с плейсхолдерами вместо значений
  * @param array $data Данные для вставки на место плейсхолдеров
  * @return int|null|string
  */
-function dbInsertData($link, $sql, $data=[]){
+function dbInsertData($link, $sql, $data = [])
+{
     $stmt = prepareStmt($link, $sql, $data); // подготавливаем выражение
+
+    if (!$stmt) {
+        showError($link);
+    }
+
     mysqli_stmt_execute($stmt);
     $res = mysqli_stmt_get_result($stmt);
     $id = null;
 
-    if ($res){
-        $id = mysqli_insert_id($link);
+    if (!$res) {
+        showError($link);
     }
 
+    $id = mysqli_insert_id($link);
+
     return $id;
+}
+
+
+/**
+ * Показ ошибки и остановка скрипта
+ * @param $link Ресурс соединения mysqli
+ */
+function showError($link){
+
+    $error = mysqli_error($link);
+    print("Ошибка: Невозможно выполнить запрос к БД. " . $error);
+    die;
+
 }
