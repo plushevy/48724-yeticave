@@ -58,3 +58,69 @@ function showTimeLeft($endTime = 'tomorrow') {
 
     return $timeLeft;
 }
+
+
+/**
+ *  Ф-ция склонения окончаний
+ * @param $number
+ * @param $variants - Массив
+ * @return mixed
+ */
+function setEnding($number, $variants) {
+
+    $num1 = $number % 100;
+    $num2 = $number % 10;
+
+    if ($num1 >= 11 && $num1 <= 14) {
+        return ' ' . $variants[2];
+    }
+
+    switch ($num2) {
+        case '1':
+            return ' ' . $variants[0];
+        case '2':
+        case '3':
+        case '4':
+            return ' ' . $variants[1];
+        default:
+            return ' ' . $variants[2];
+    }
+
+    return $variants[2];
+
+}
+
+
+/** Форматирует полученную из БД метку timestamp в склоняемые 'Осталось минут и секунд'
+ * @param $str
+ * @return int
+ */
+function customTimeLeft ($str) {
+    $minEnds = ['минуту', 'минуты', 'минут'];
+    $hourEnds = ['час', 'часа', 'часов'];
+    $now = time();
+    $sec = strtotime($str);
+    $timeLeft =  $now - $sec;
+    $days = floor($timeLeft / 86400);
+    $hours = floor($timeLeft / 3600);
+    $mins = floor($timeLeft / 60 );
+    if ($hours > 23) {
+        $result = gmdate('d.m.y \в H:i', $sec);
+        return print( $result);
+    } else {
+        if ($mins > 59) {
+            return print( $hours . setEnding($hours, $hourEnds) . ' назад');
+        } else {
+            return print( $mins. setEnding($mins, $minEnds) . ' назад');
+        }
+    }
+
+};
+
+/**
+ * Вывод ошибки 404 с завершением скрипта
+ */
+function showError404() {
+    header("HTTP/1.1 404 Not Found");
+    die("Такой страницы не существует. Ошибка - " . http_response_code());
+};
