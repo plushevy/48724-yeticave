@@ -100,7 +100,7 @@ function showError($link){
  * Обертка mysqli_stmt_get_result с выводом ошибки
  * @param $link Ресурс соединения mysqli
  * @param $stmt Подготовленное SQL выражение
- * @return bool|mysqli_result
+ * @return mysqli_result
  */
 function mysqliGetResult($link, $stmt) {
     $res = mysqli_stmt_get_result($stmt);
