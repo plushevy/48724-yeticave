@@ -39,7 +39,7 @@
                             <tr class="history__item">
                                 <td class="history__name"><?=$bet['name'];?></td>
                                 <td class="history__price"><?= formatPrice($bet['price']); ?></td>
-                                <td class="history__time"><?= customTimeLeft($bet['dt_create']); ?></td>
+                                <td class="history__time"><?= customTimeLeft($bet['dt_create']) ?></td>
                             </tr>
                         <?php endforeach;?>
                     </table>

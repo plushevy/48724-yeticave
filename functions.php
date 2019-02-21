@@ -91,9 +91,10 @@ function setEnding($number, $variants) {
 }
 
 
-/** Форматирует полученную из БД метку timestamp в склоняемые 'Осталось минут и секунд'
- * @param $str
- * @return int
+/**
+ * Форматирует полученную из БД метку timestamp в склоняемые 'Осталось минут и секунд
+ * @param $str - timestamp из БД в виде строки
+ * @return string
  */
 function customTimeLeft ($str) {
     $minEnds = ['минуту', 'минуты', 'минут'];
@@ -104,17 +105,20 @@ function customTimeLeft ($str) {
     $days = floor($timeLeft / 86400);
     $hours = floor($timeLeft / 3600);
     $mins = floor($timeLeft / 60 );
+    $result = '';
+
     if ($hours > 23) {
         $result = gmdate('d.m.y \в H:i', $sec);
-        return print( $result);
     } else {
+
         if ($mins > 59) {
-            return print( $hours . setEnding($hours, $hourEnds) . ' назад');
+            $result = $hours . setEnding($hours, $hourEnds) . ' назад';
         } else {
-            return print( $mins. setEnding($mins, $minEnds) . ' назад');
+            $result = $mins. setEnding($mins, $minEnds) . ' назад';
         }
     }
 
+    return $result;
 };
 
 /**
