@@ -7,7 +7,15 @@ require_once ('db-connect.php');
 
 // запрос для получения списка новых лотов
 $sqlGetLots = "
-SELECT  l.id, l.label as name, l.start_price, l.img_url as image, IFNULL(max(b.last_price), l.start_price) as price, c.name as category
+SELECT  
+    l.id, 
+    l.label as name, 
+    l.start_price, 
+    l.img_url as image, 
+    IFNULL(max(b.last_price), 
+    l.start_price) as price,
+    l.dt_end,
+    c.name as category
 FROM lots l
   LEFT JOIN bets b ON b.id_lot = l.id
   JOIN categories c ON c.id = l.id_category

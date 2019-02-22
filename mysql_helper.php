@@ -40,6 +40,10 @@ function prepareStmt($link, $sql, $data = [])
         $func(...$values);
     }
 
+    if (!$stmt) {
+        showError($link);
+    }
+
     return $stmt;
 }
 
@@ -54,18 +58,8 @@ function dbGetData($link, $sql, $data = [])
 {
     $result = [];
     $stmt = prepareStmt($link, $sql, $data); // подготавливаем выражение
-
-    if (!$stmt) {
-        showError($link);
-    }
-
     mysqli_stmt_execute($stmt);
-    $res = mysqli_stmt_get_result($stmt);
-
-    if (!$res) {
-        showError($link);
-    }
-
+    $res = mysqliGetResult($link, $stmt);
     $result = mysqli_fetch_all($res, MYSQLI_ASSOC);
 
     return $result;
@@ -81,19 +75,8 @@ function dbGetData($link, $sql, $data = [])
 function dbInsertData($link, $sql, $data = [])
 {
     $stmt = prepareStmt($link, $sql, $data); // подготавливаем выражение
-
-    if (!$stmt) {
-        showError($link);
-    }
-
     mysqli_stmt_execute($stmt);
-    $res = mysqli_stmt_get_result($stmt);
-    $id = null;
-
-    if (!$res) {
-        showError($link);
-    }
-
+    mysqliGetResult($link, $stmt);
     $id = mysqli_insert_id($link);
 
     return $id;
@@ -110,4 +93,19 @@ function showError($link){
     print("Ошибка: Невозможно выполнить запрос к БД. " . $error);
     die;
 
+}
+
+
+/**
+ * Обертка mysqli_stmt_get_result с выводом ошибки
+ * @param $link Ресурс соединения mysqli
+ * @param $stmt Подготовленное SQL выражение
+ * @return mysqli_result
+ */
+function mysqliGetResult($link, $stmt) {
+    $res = mysqli_stmt_get_result($stmt);
+    if (!$res) {
+        showError($link);
+    }
+    return $res;
 }
