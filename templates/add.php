@@ -1,33 +1,36 @@
 <?php
 
-$name = getValues($_POST,'lot-name');
-$selectedCategory = getValues($_POST,'category');
-$message = getValues($_POST,'message');
-$rate = getValues($_POST,'lot-rate');
-$step = getValues($_POST,'lot-step');
-$date = getValues($_POST,'lot-date');
 
-$nameErr = getValues($errors,'lot-name');
-$selectedCategoryErr = getValues($errors,'category');
-$messageErr = getValues($errors,'message');
-$rateErr = getValues($errors,'lot-rate');
-$stepErr = getValues($errors,'lot-step');
-$dateErr = getValues($errors,'lot-date');
-$fileErr = getValues($errors,'image');
+$name = $_POST['lot-name'] ?? false;
+$selectedCategory = $_POST['category'] ?? false;
+$message = $_POST['message'] ?? false;
+$rate = $_POST['lot-rate'] ?? false;
+$step = $_POST['lot-step'] ?? false;
+$date = $_POST['lot-date'] ?? false;
+
+
+$nameErr = $errors['lot-name'] ?? false;
+$selectedCategoryErr = $errors['category'] ?? false;
+$messageErr = $errors['message'] ?? false;
+$rateErr = $errors['lot-rate'] ?? false;
+$stepErr = $errors['lot-step'] ?? false;
+$dateErr = $errors['lot-date'] ?? false;
+$fileErr = $errors['image'] ?? false;
 
 $formErrClass = (!empty($errors)) ? 'form--invalid' : '';
+$itemErrClass = 'form__item--invalid';
 
 ?>
 
 <form class="form form--add-lot container <?= $formErrClass;?>" action="add.php" method="post" enctype="multipart/form-data"> <!-- form--invalid -->
     <h2>Добавление лота</h2>
     <div class="form__container-two">
-        <div class="form__item <?php if ($nameErr) {echo 'form__item--invalid';} ?>"> <!-- form__item--invalid -->
+        <div class="form__item <?php if ($nameErr) {echo $itemErrClass;} ?>"> <!-- form__item--invalid -->
             <label for="lot-name">Наименование</label>
             <input id="lot-name" type="text" name="lot-name" placeholder="Введите наименование лота" value="<?=$name?>" >
             <span class="form__error"><?=$nameErr?></span>
         </div>
-        <div class="form__item <?php if ($selectedCategoryErr) {echo 'form__item--invalid';} ?>">
+        <div class="form__item <?php if ($selectedCategoryErr) {echo $itemErrClass;} ?>">
             <label for="category">Категория</label>
             <select id="category" name="category" required>
                 <option value="">Выберите категорию</option>
@@ -40,12 +43,12 @@ $formErrClass = (!empty($errors)) ? 'form--invalid' : '';
             <span class="form__error"><?=$selectedCategoryErr?></span>
         </div>
     </div>
-    <div class="form__item form__item--wide <?php if ($messageErr) {echo 'form__item--invalid';} ?>">
+    <div class="form__item form__item--wide <?php if ($messageErr) {echo $itemErrClass;} ?>">
         <label for="message">Описание</label>
         <textarea id="message" name="message" placeholder="Напишите описание лота" required><?=$message?></textarea>
         <span class="form__error"><?=$messageErr?></span>
     </div>
-    <div class="form__item form__item--file <?php if ($fileErr) {echo 'form__item--invalid';} ?>"> <!-- form__item--uploaded -->
+    <div class="form__item form__item--file <?php if ($fileErr) {echo $itemErrClass;} ?>"> <!-- form__item--uploaded -->
         <label>Изображение</label>
         <div class="preview">
             <button class="preview__remove" type="button">x</button>
@@ -64,17 +67,17 @@ $formErrClass = (!empty($errors)) ? 'form--invalid' : '';
         <span class="form__error"><?=$fileErr?></span>
     </div>
     <div class="form__container-three">
-        <div class="form__item form__item--small <?php if ($rateErr) {echo 'form__item--invalid';} ?>">
+        <div class="form__item form__item--small <?php if ($rateErr) {echo $itemErrClass;} ?>">
             <label for="lot-rate">Начальная цена</label>
             <input id="lot-rate" type="number" name="lot-rate" placeholder="0" value="<?=$rate?>" >
             <span class="form__error"><?=$rateErr?></span>
         </div>
-        <div class="form__item form__item--small <?php if ($stepErr) {echo 'form__item--invalid';} ?>">
+        <div class="form__item form__item--small <?php if ($stepErr) {echo $itemErrClass;} ?>">
             <label for="lot-step">Шаг ставки</label>
             <input id="lot-step" type="number" name="lot-step" placeholder="0" value="<?=$step?>" >
             <span class="form__error"><?=$stepErr?></span>
         </div>
-        <div class="form__item <?php if ($dateErr) {echo 'form__item--invalid';} ?>">
+        <div class="form__item <?php if ($dateErr) {echo $itemErrClass;} ?>">
             <label for="lot-date">Дата окончания торгов</label>
             <input class="form__input-date" id="lot-date" type="date" name="lot-date" value="<?=$date?>" >
             <span class="form__error"><?=$dateErr?></span>

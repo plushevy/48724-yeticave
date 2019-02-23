@@ -49,11 +49,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errors[$field] = "Описание должно быть не менее 10 символов";
         }
 
-        // проверка на числа
+        // проверка на положительные числа
         if (in_array($field, $numericFields) && !empty($value)) {
 
-            if (!filter_var($value, FILTER_VALIDATE_INT)) {
-                $errors[$field] = 'Введите число';
+            $filter_options = array(
+                'options' => array( 'min_range' => 0)
+            );
+
+            if (!filter_var($value, FILTER_VALIDATE_INT, $filter_options)) {
+                $errors[$field] = 'Введите положительное число';
             }
         }
 
@@ -75,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errors['image'] = "Загрузите картинку в формате jpg, jpeg, png, webp";
         }
 
-        if ($fileSize == 0 || $fileSize > MAX_FILE_SIZE) {
+        if ($fileSize == 0 || $fileSize > MAX_FILE_SIZE || $_FILES['image']['error'] !== UPLOAD_ERR_OK) {
             $errors['image'] = "Загрузите картинку размером до 2Mb";
         }
 
@@ -88,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             move_uploaded_file($fileTmpName, $pathToFile);
 
             // готовим данные для отправки
-            $dt_end = '2019-03-16 23:59:59'; //strip_tags($_POST['lot-date']); временно
+            $dt_end = strip_tags($_POST['lot-date']);
             $label = strip_tags($_POST['lot-name']);
             $desc = strip_tags($_POST['message']);
             $imgUrl = $pathToFile;
@@ -97,12 +101,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $idUser = rand(1, 2);  // временно
             $idCategory = (int) $_POST['category'];
 
+
+            // проверка на наличие категории
+            $sqlCheckCategory = "SELECT * FROM categories WHERE id = ?";
+            $isCategoryExists = dbGetData($link, $sqlCheckCategory, [$idCategory]);
+            if (!$isCategoryExists) {
+                die ('Ошибка. Нет такой категории');
+            }
+
+
             $sql = " INSERT INTO lots (dt_end, label, description, img_url, start_price, bet_step, id_user, id_category) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
             $newLotId = dbInsertData($link, $sql, [$dt_end, $label, $desc, $imgUrl, $startPrice, $betStep, $idUser, $idCategory]);
 
             header("Location: lot.php?id=" . $newLotId);
+            die;
         }
 
 

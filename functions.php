@@ -167,15 +167,3 @@ function getExtension($str) {
     $mime = (isset($matches[1])) ? $matches[1] : '';
     return $mime;
 }
-
-
-/**
- * Возвращает значение массива по ключу или заданное значение( пустая строка по-умолчанию)
- * @param array $arr
- * @param string $key
- * @return string | boolean
- */
-function getValues($arr, $key) {
-    return (isset($arr[$key])) ? $arr[$key] : false;
-
-}
