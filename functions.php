@@ -155,3 +155,27 @@ function showError404() {
     header("HTTP/1.1 404 Not Found");
     die("Такой страницы не существует. Ошибка - " . http_response_code());
 };
+
+
+/**
+ * Получаем расширение файла
+ * @param string $str
+ * @return string
+ */
+function getExtension($str) {
+    preg_match('/.*\.(\w{1,4})$/i', $str, $matches);
+    $mime = (isset($matches[1])) ? $matches[1] : '';
+    return $mime;
+}
+
+
+/**
+ * Возвращает значение массива по ключу или заданное значение( пустая строка по-умолчанию)
+ * @param array $arr
+ * @param string $key
+ * @return string | boolean
+ */
+function getValues($arr, $key) {
+    return (isset($arr[$key])) ? $arr[$key] : false;
+
+}

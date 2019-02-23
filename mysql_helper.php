@@ -76,7 +76,7 @@ function dbInsertData($link, $sql, $data = [])
 {
     $stmt = prepareStmt($link, $sql, $data); // подготавливаем выражение
     mysqli_stmt_execute($stmt);
-    mysqliGetResult($link, $stmt);
+    mysqli_stmt_get_result($stmt);
     $id = mysqli_insert_id($link);
 
     return $id;
