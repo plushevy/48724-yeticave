@@ -167,3 +167,40 @@ function getExtensionFromMime($str) {
     $mime = (isset($matches[1])) ? $matches[1] : '';
     return $mime;
 }
+
+
+/**
+ * Проверка даты окончания лота, должна приходить в формате дд.мм.гггг
+ * @param string $str
+ * @return bool
+ */
+function checkEndDate($str){
+
+    $pattern = '/^\d{2}\.\d{2}\.\d{4}$/';
+
+    if ( !preg_match($pattern, $str)) {
+        return false;
+    }
+
+    $now = strtotime('now');
+    $endDt = strtotime($str);
+    $secsinMin = 60;
+    $secsInHour = $secsinMin * 60;
+
+    $diff = $endDt - $now;
+    $hours = floor($diff / $secsInHour);
+
+    return $hours >= 24;
+
+}
+
+
+/**
+ * Возвращиет строку даты виде гггг-мм-дд 23:59:59
+ * @param string $str
+ * @return string
+ */
+function dateToTimestamp($str) {;
+    $dt = date_create($str);
+    return date_format($dt, "Y-m-d 23:59:59");
+}

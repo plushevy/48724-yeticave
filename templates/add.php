@@ -1,14 +1,5 @@
 <?php
 
-
-$name = htmlspecialchars($userData['lot-name'] ?? '');
-$selectedCategory = htmlspecialchars($userData['category'] ?? '');
-$message = htmlspecialchars(_POST['message'] ?? '');
-$rate = htmlspecialchars($userData['lot-rate'] ?? '');
-$step = htmlspecialchars($userData['lot-step'] ?? '');
-$date = htmlspecialchars($userData['lot-date'] ?? '');
-
-
 $nameErr = $errors['lot-name'] ?? '';
 $selectedCategoryErr = $errors['category'] ?? '';
 $messageErr = $errors['message'] ?? '';

@@ -21,6 +21,14 @@ $requiredFields = [
     'lot-step',
     'lot-date'
 ];
+
+$name = '';
+$selectedCategory = '';
+$message = '';
+$rate = '';
+$step = '';
+$date = '';
+
 $numericFields = ['lot-rate', 'lot-step'];
 
 $isValidRequiredFields = false;
@@ -47,6 +55,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($field == "message" && strlen($value) < 10) {
             $errors[$field] = "Описание должно быть не менее 10 символов";
+        }
+
+        if ($field == "lot-date" && !checkEndDate($value)) {
+            $errors[$field] = "Дата (дд.мм.гггг) больше текушей минимум на 1 день";
         }
 
         // проверка на положительные числа
@@ -92,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             move_uploaded_file($fileTmpName, $pathToFile);
 
             // готовим данные для отправки
-            $dt_end = strip_tags($_POST['lot-date']);
+            $dt_end = dateToTimestamp(strip_tags($_POST['lot-date']));
             $label = strip_tags($_POST['lot-name']);
             $desc = strip_tags($_POST['message']);
             $imgUrl = $pathToFile;
@@ -124,17 +136,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $errors['image'] = "Загрузите фотографию лота";
     }
-}
 
-// копирую данные из POST для передачи в шаблон
-$userData = array_merge([], $_POST);
+    // данные для передачи в шаблон
+    $name = ($_POST['lot-name']) ? strip_tags($_POST['lot-name']) : '';
+    $selectedCategory = ($_POST['category']) ? strip_tags($_POST['category']) : '' ;
+    $message = ($_POST['message']) ? strip_tags($_POST['message']) : '';
+    $rate = ($_POST['lot-rate']) ? strip_tags($_POST['lot-rate']) : '';
+    $step = ($_POST['lot-step']) ? strip_tags($_POST['lot-step']) : '';
+    $date = ($_POST['lot-date']) ? strip_tags($_POST['lot-date']) : '';
+
+}
 
 $pageContent = renderTemplate(
     'add.php',
     [
         'categories' => $categories,
         'errors' => $errors,
-        'userData' => $userData
+        'name' => $name,
+        'selectedCategory' => $selectedCategory,
+        'message' => $message,
+        'rate' => $rate,
+        'step' => $step,
+        'date' => $date
     ]);
 
 
