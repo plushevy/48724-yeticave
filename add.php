@@ -126,12 +126,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
+// копирую данные из POST для передачи в шаблон
+$userData = array_merge([], $_POST);
 
 $pageContent = renderTemplate(
     'add.php',
     [
         'categories' => $categories,
-        'errors' => $errors
+        'errors' => $errors,
+        'userData' => $userData
     ]);
 
 
