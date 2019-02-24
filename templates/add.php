@@ -1,21 +1,21 @@
 <?php
 
 
-$name = htmlspecialchars($userData['lot-name'] ?? false);
-$selectedCategory = htmlspecialchars($userData['category'] ?? false);
-$message = htmlspecialchars(_POST['message'] ?? false);
-$rate = htmlspecialchars($userData['lot-rate'] ?? false);
-$step = htmlspecialchars($userData['lot-step'] ?? false);
-$date = htmlspecialchars($userData['lot-date'] ?? false);
+$name = htmlspecialchars($userData['lot-name'] ?? '');
+$selectedCategory = htmlspecialchars($userData['category'] ?? '');
+$message = htmlspecialchars(_POST['message'] ?? '');
+$rate = htmlspecialchars($userData['lot-rate'] ?? '');
+$step = htmlspecialchars($userData['lot-step'] ?? '');
+$date = htmlspecialchars($userData['lot-date'] ?? '');
 
 
-$nameErr = $errors['lot-name'] ?? false;
-$selectedCategoryErr = $errors['category'] ?? false;
-$messageErr = $errors['message'] ?? false;
-$rateErr = $errors['lot-rate'] ?? false;
-$stepErr = $errors['lot-step'] ?? false;
-$dateErr = $errors['lot-date'] ?? false;
-$fileErr = $errors['image'] ?? false;
+$nameErr = $errors['lot-name'] ?? '';
+$selectedCategoryErr = $errors['category'] ?? '';
+$messageErr = $errors['message'] ?? '';
+$rateErr = $errors['lot-rate'] ?? '';
+$stepErr = $errors['lot-step'] ?? '';
+$dateErr = $errors['lot-date'] ?? '';
+$fileErr = $errors['image'] ?? '';
 
 $formErrClass = (!empty($errors)) ? 'form--invalid' : '';
 $itemErrClass = 'form__item--invalid';
