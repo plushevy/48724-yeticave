@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     }
 
-    $isValidRequiredFields = (!count($errors)) ?? false;
+    $isValidRequiredFields = empty($errors);
 
     // Если все поля проверены - переходим к загрузке файла
     if ($isValidRequiredFields && isset($_FILES['image'])) {

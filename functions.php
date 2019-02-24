@@ -176,6 +176,8 @@ function getExtensionFromMime($str) {
  */
 function checkEndDate($str){
 
+    date_default_timezone_set('Europe/Moscow');
+
     $pattern = '/^\d{2}\.\d{2}\.\d{4}$/';
 
     if ( !preg_match($pattern, $str)) {
@@ -183,15 +185,15 @@ function checkEndDate($str){
     }
 
     $now = strtotime('now');
-    $endDt = strtotime($str);
+    $endDt = strtotime($str. '23:59:59');
     $secsinMin = 60;
     $secsInHour = $secsinMin * 60;
+    $secsInDay = $secsInHour * 24;
 
     $diff = $endDt - $now;
-    $hours = floor($diff / $secsInHour);
+    $day = floor($diff / $secsInDay);
 
-    return $hours >= 24;
-
+    return $day >= 1;
 }
 
 
