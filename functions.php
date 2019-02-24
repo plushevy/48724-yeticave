@@ -162,8 +162,8 @@ function showError404() {
  * @param string $str
  * @return string
  */
-function getExtension($str) {
-    preg_match('/.*\.(\w{1,4})$/i', $str, $matches);
+function getExtensionFromMime($str) {
+    preg_match('/.*\/(\w{1,4})$/i', $str, $matches);
     $mime = (isset($matches[1])) ? $matches[1] : '';
     return $mime;
 }

@@ -1,12 +1,12 @@
 <?php
 
 
-$name = $_POST['lot-name'] ?? false;
-$selectedCategory = $_POST['category'] ?? false;
-$message = $_POST['message'] ?? false;
-$rate = $_POST['lot-rate'] ?? false;
-$step = $_POST['lot-step'] ?? false;
-$date = $_POST['lot-date'] ?? false;
+$name = htmlspecialchars($_POST['lot-name'] ?? false);
+$selectedCategory = htmlspecialchars($_POST['category'] ?? false);
+$message = htmlspecialchars(_POST['message'] ?? false);
+$rate = htmlspecialchars($_POST['lot-rate'] ?? false);
+$step = htmlspecialchars($_POST['lot-step'] ?? false);
+$date = htmlspecialchars($_POST['lot-date'] ?? false);
 
 
 $nameErr = $errors['lot-name'] ?? false;

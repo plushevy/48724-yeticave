@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Если нет ошибок и файл загружен, отправляем данные в БД
         if (!count($errors)) {
 
-            $ext = getExtension($fileName);
+            $ext = getExtensionFromMime($fileType);
             $newFileName = uniqid() . '.' . $ext;
             $pathToFile = UPLOAD_IMG_DIR . $newFileName;
             move_uploaded_file($fileTmpName, $pathToFile);
