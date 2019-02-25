@@ -155,3 +155,54 @@ function showError404() {
     header("HTTP/1.1 404 Not Found");
     die("Такой страницы не существует. Ошибка - " . http_response_code());
 };
+
+
+/**
+ * Получаем расширение файла
+ * @param string $str
+ * @return string
+ */
+function getExtensionFromMime($str) {
+    preg_match('/.*\/(\w{1,4})$/i', $str, $matches);
+    $mime = (isset($matches[1])) ? $matches[1] : '';
+    return $mime;
+}
+
+
+/**
+ * Проверка даты окончания лота, должна приходить в формате дд.мм.гггг
+ * @param string $str
+ * @return bool
+ */
+function checkEndDate($str){
+
+    date_default_timezone_set('Europe/Moscow');
+
+    $pattern = '/^\d{2}\.\d{2}\.\d{4}$/';
+
+    if ( !preg_match($pattern, $str)) {
+        return false;
+    }
+
+    $now = strtotime('now');
+    $endDt = strtotime($str. '23:59:59');
+    $secsinMin = 60;
+    $secsInHour = $secsinMin * 60;
+    $secsInDay = $secsInHour * 24;
+
+    $diff = $endDt - $now;
+    $day = floor($diff / $secsInDay);
+
+    return $day >= 1;
+}
+
+
+/**
+ * Возвращиет строку даты виде гггг-мм-дд 23:59:59
+ * @param string $str
+ * @return string
+ */
+function dateToTimestamp($str) {;
+    $dt = date_create($str);
+    return date_format($dt, "Y-m-d 23:59:59");
+}
