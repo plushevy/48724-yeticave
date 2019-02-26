@@ -8,6 +8,7 @@ $fileErr = $errors['avatar'] ?? '';
 
 $formErrClass = (!empty($errors)) ? 'form--invalid' : '';
 $itemErrClass = 'form__item--invalid';
+$pathToFile = $pathToFile ?? 'img/avatar.jpg';
 
 ?>
 <form class="form container <?= $formErrClass;?>" action="sign-up.php" method="post" enctype="multipart/form-data"> <!-- form--invalid -->
@@ -37,7 +38,7 @@ $itemErrClass = 'form__item--invalid';
         <div class="preview">
             <button class="preview__remove" type="button">x</button>
             <div class="preview__img">
-                <img src="img/avatar.jpg" width="113" height="113" alt="Ваш аватар">
+                <img src="<?= $pathToFile?>" width="113" height="113" alt="Ваш аватар">
             </div>
         </div>
         <div class="form__input-file">

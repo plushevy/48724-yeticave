@@ -207,6 +207,15 @@ function dateToTimestamp($str) {;
     return date_format($dt, "Y-m-d 23:59:59");
 }
 
+/**
+ * Экранирование и очистка от пробелов
+ * @param string $str
+ * @return string
+ */
+function cleanVal($str) {
+    return strip_tags(trim($str));
+}
+
 
 /**
  * Временная ф-ция для дебага
@@ -218,3 +227,5 @@ function debug($arr) {
     echo "</pre>";
     die;
 }
+
+

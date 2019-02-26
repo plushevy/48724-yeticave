@@ -24,7 +24,7 @@ $name = '';
 $email = '';
 $message = '';
 $password = '';
-$pathToFile = 'img/avatar.jpg';
+$pathToFile = '';
 
 $isValidRequiredFields = false;
 
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     foreach ($_POST as $field => $value) {
 
-        $value = trim($value);
+        $value = cleanVal($value);
 
         if (in_array($field, $requiredFields) && empty($value)) {
             $errors[$field] = 'Заполните это поле';
@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         // если картинка подходит - загружаем и переопределяем $pathToFile
-        if (!strlen($errors['avatar'])) {
+        if (!count($errors)) {
 
             $ext = getExtensionFromMime($fileType);
             $newFileName = uniqid() . '.' . $ext;
@@ -86,10 +86,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
     // готовим данные для отправки
-    $userEmail = strip_tags($_POST['email']);
-    $userName = strip_tags($_POST['name']);
-    $userPass = password_hash($_POST['password'], PASSWORD_DEFAULT);
-    $userContacts = strip_tags($_POST['message']);
+    $userEmail = cleanVal($_POST['email']);
+    $userName = cleanVal($_POST['name']);
+    $userPass = password_hash(cleanVal($_POST['password']), PASSWORD_DEFAULT);
+    $userContacts = cleanVal($_POST['message']);
     $imgUrl = $pathToFile;
 
 
@@ -120,10 +120,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // данные для передачи в шаблон
-    $name = ($_POST['name']) ? strip_tags($_POST['name']) : '';
-    $email = ($_POST['email']) ? strip_tags($_POST['email']) : '';
-    $message = ($_POST['message']) ? strip_tags($_POST['message']) : '';
-    $password = ($_POST['password']) ? strip_tags($_POST['password']) : '';
+    $name = ($_POST['name']) ? cleanVal($_POST['name']) : '';
+    $email = ($_POST['email']) ? cleanVal($_POST['email']) : '';
+    $message = ($_POST['message']) ? cleanVal($_POST['message']) : '';
+    $password = ($_POST['password']) ? cleanVal($_POST['password']) : '';
 
 }
 
@@ -134,7 +134,8 @@ $pageContent = renderTemplate(
         'name' => $name,
         'email' => $email,
         'message' => $message,
-        'password' => $password
+        'password' => $password,
+        'pathToFile' => $pathToFile
     ]);
 
 // запрос для получения списка катеорий
