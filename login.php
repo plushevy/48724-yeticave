@@ -96,7 +96,7 @@ $layoutContent = renderTemplate(
         'navCategories' => $navCategories,
         'isAuth' => $isAuth,
         'userName' => $userName,
-        'title' => 'Yeticave | Регистрация'
+        'title' => 'Yeticave | Вход на сайт'
     ]);
 
 print($layoutContent);
