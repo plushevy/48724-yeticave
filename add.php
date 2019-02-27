@@ -4,7 +4,7 @@ require_once('init.php');
 
 if (!$isAuth) {
     // незалогиненным вход запрещен
-    http_response_code(403);
+    // http_response_code(403);
     header("Location: login.php");
     die;
 }
