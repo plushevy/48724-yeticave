@@ -1,9 +1,6 @@
 <?php
 
-require_once('functions.php');
-require_once('data.php');
-require_once('mysql_helper.php');
-require_once('db-connect.php');
+require_once('init.php');
 
 define('MAX_FILE_SIZE', 2 * 1024 * 1024); // 2mb
 define('UPLOAD_IMG_DIR', './img/');
@@ -127,9 +124,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 }
 
+// запрос для получения списка катеорий
+$sqlGetCategories = "SELECT * FROM categories";
+$categories = dbGetData($link, $sqlGetCategories);
+
+// список категорий
+$navCategories = renderTemplate(
+    'nav.php',
+    [
+        'categories' => $categories
+    ]);
+
 $pageContent = renderTemplate(
     'sign-up.php',
     [
+        'navCategories' => $navCategories,
         'errors' => $errors,
         'name' => $name,
         'email' => $email,
@@ -138,16 +147,12 @@ $pageContent = renderTemplate(
         'pathToFile' => $pathToFile
     ]);
 
-// запрос для получения списка катеорий
-$sqlGetCategories = "SELECT * FROM categories";
-$categories = dbGetData($link, $sqlGetCategories);
-
 
 $layoutContent = renderTemplate(
     'layout.php',
     [
         'content' => $pageContent,
-        'categories' => $categories,
+        'navCategories' => $navCategories,
         'isAuth' => $isAuth,
         'userName' => $userName,
         'title' => 'Yeticave | Регистрация'

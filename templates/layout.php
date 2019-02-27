@@ -23,9 +23,12 @@
 
             <nav class="user-menu">
 
-                <?php if($isAuth): ?>
+
+
+                <?php if ($isAuth): ?>
                     <div class="user-menu__logged">
                         <p><?= $userName; ?></p>
+                        <a href="/logout.php">Выйти</a>
                     </div>
                 <?php else: ?>
                     <ul class="user-menu__list">
@@ -33,7 +36,7 @@
                             <a href="/sign-up.php">Регистрация</a>
                         </li>
                         <li class="user-menu__item">
-                            <a href="#">Вход</a>
+                            <a href="/login.php">Вход</a>
                         </li>
                     </ul>
                 <?php endif; ?>
@@ -42,21 +45,17 @@
         </div>
     </header>
 
-    <main class="container"><?= $content; ?></main>
+    <!-- page content-->
+    <?= $content; ?>
+    <!-- page content end-->
+
 
 </div>
 
 <footer class="main-footer">
-    <nav class="nav">
-        <ul class="nav__list container">
-            <!-- этот список из массива категорий-->
-            <?php foreach($categories as $category) : ?>
-                <li class="nav__item">
-                    <a href="pages/all-lots.html?id=<?= $category['id']; ?>"><?= htmlspecialchars($category['name']); ?></a>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-    </nav>
+
+    <?= $navCategories; ?>
+
     <div class="main-footer__bottom container">
         <div class="main-footer__copyright">
             <p>© 2019, YetiCave</p>

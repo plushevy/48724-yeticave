@@ -1,9 +1,6 @@
 <?php
 
-require_once ('functions.php');
-require_once ('data.php');
-require_once ('mysql_helper.php');
-require_once ('db-connect.php');
+require_once('init.php');
 
 // запрос для получения списка новых лотов
 $sqlGetLots = "
@@ -29,6 +26,14 @@ $sqlGetCategories = "SELECT * FROM categories";
 $items = dbGetData($link, $sqlGetLots);
 $categories = dbGetData($link, $sqlGetCategories);
 
+// список категорий
+$navCategories = renderTemplate(
+    'nav.php',
+    [
+        'categories' => $categories
+    ]);
+
+
 $mainPageContent = renderTemplate(
     'index.php',
     [
@@ -40,7 +45,7 @@ $layoutContent = renderTemplate(
     'layout.php',
     [
     'content' => $mainPageContent,
-    'categories' => $categories,
+    'navCategories' => $navCategories,
     'isAuth' => $isAuth,
     'userName' => $userName,
     'title' => 'Yeticave | Главная страница'
