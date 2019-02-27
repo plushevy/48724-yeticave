@@ -2,6 +2,7 @@
 
 session_start();
 // разлогиниваем пользователя
-unset($_SESSION['user']);
+session_destroy();
 header("Location: /index.php");
+die;
 

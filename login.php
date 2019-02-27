@@ -7,8 +7,6 @@ $errors = [];
 $email = '';
 $password = '';
 
-$isValidRequiredFields = false;
-
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -27,37 +25,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     }
 
-    $isValidRequiredFields = empty($errors);
+    // если поля заполнены и нет ошибок
+    if (!count($errors)) {
+
+        // готовим данные для отправки
+        $formEmail = cleanVal($_POST['email']);
+        $formPass = cleanVal($_POST['password']);
+
+        // проверка что такой  email в БД есть
+        $sqlCheckEmail = "SELECT * FROM users WHERE email = ?";
+        $user = dbGetData($link, $sqlCheckEmail, [$formEmail]);
 
 
-    // готовим данные для отправки
-    $formEmail = cleanVal($_POST['email']);
-    $formPass = cleanVal($_POST['password']);
+        if ($user) {
 
-    // проверка что такой  email в БД есть
-    $sqlCheckEmail = "SELECT * FROM users WHERE email = ?";
-    $user = dbGetData($link, $sqlCheckEmail, [$formEmail]);
+            $user = $user[0];
 
+            // проверка хэша введенного пароля с паролем из БД
+            if (password_verify($formPass, $user['password'])) {
+                // сохраняем в сессию данные пользователя. авторизация пройдена
+                $_SESSION['user'] = $user;
+                header("Location: /index.php?success=true");
+                die();
+            }
+            else {
+                $errors['password'] = 'Неверный пароль';
+            }
 
-    if (!count($errors) && $user) {
-
-        $user = $user[0];
-
-        // проверка хэша введенного пароля с паролем из БД
-        if (password_verify($formPass, $user['password'])) {
-            // сохраняем в сессию данные пользователя
-            $_SESSION['user'] = $user;
-            // аутентификация пройдена
-            $isAuth = true;
-            header("Location: /index.php?success=true");
-            die();
+        } else {
+            $errors['email'] = 'Такой email не зарегистрирован';
         }
-        else {
-            $errors['password'] = 'Неверный пароль';
-        }
 
-    } else {
-        $errors['email'] = 'Такой email не зарегистрирован';
     }
 
 
