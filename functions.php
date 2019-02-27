@@ -185,7 +185,7 @@ function checkEndDate($str){
     }
 
     $now = strtotime('now');
-    $endDt = strtotime($str. '23:59:59');
+    $endDt = strtotime($str . ' 23:59:59');
     $secsinMin = 60;
     $secsInHour = $secsinMin * 60;
     $secsInDay = $secsInHour * 24;
@@ -206,3 +206,26 @@ function dateToTimestamp($str) {;
     $dt = date_create($str);
     return date_format($dt, "Y-m-d 23:59:59");
 }
+
+/**
+ * Экранирование и очистка от пробелов
+ * @param string $str
+ * @return string
+ */
+function cleanVal($str) {
+    return strip_tags(trim($str));
+}
+
+
+/**
+ * Временная ф-ция для дебага
+ * @param $arr
+ */
+function debug($arr) {
+    echo "<pre>";
+    var_dump($arr);
+    echo "</pre>";
+    die;
+}
+
+
