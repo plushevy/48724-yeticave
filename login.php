@@ -8,52 +8,59 @@ $email = '';
 $password = '';
 
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email']) && isset($_POST['password'])) {
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
+    if (isset($_POST['email']) && isset($_POST['password'])) {
 
-    foreach ($_POST as $field => $value) {
+        foreach ($_POST as $field => $value) {
 
-        $value = cleanVal($value);
+            $value = cleanVal($value);
 
-        if ($field == "password" && empty($value)) {
-            $errors[$field] = "Введите пароль";
+            if ($field == "password" && empty($value)) {
+                $errors[$field] = "Введите пароль";
+            }
+
+            if ($field == "email" && ((empty($value) || !filter_var($value, FILTER_VALIDATE_EMAIL)))) {
+                $errors[$field] = "Введите валидный email";
+            }
+
         }
 
-        if ($field == "email" && ((empty($value) || !filter_var($value, FILTER_VALIDATE_EMAIL)))) {
-            $errors[$field] = "Введите валидный email";
-        }
+        // если поля заполнены и нет ошибок
+        if (!count($errors)) {
 
-    }
+            // готовим данные для отправки
+            $formEmail = cleanVal($_POST['email']);
+            $formPass = cleanVal($_POST['password']);
 
-    // если поля заполнены и нет ошибок
-    if (!count($errors)) {
-
-        // готовим данные для отправки
-        $formEmail = cleanVal($_POST['email']);
-        $formPass = cleanVal($_POST['password']);
-
-        // проверка что такой  email в БД есть
-        $sqlCheckEmail = "SELECT * FROM users WHERE email = ?";
-        $user = dbGetData($link, $sqlCheckEmail, [$formEmail]);
+            // проверка что такой  email в БД есть
+            $sqlCheckEmail = "SELECT * FROM users WHERE email = ?";
+            $user = dbGetData($link, $sqlCheckEmail, [$formEmail]);
 
 
-        if ($user) {
+            if ($user) {
 
-            $user = $user[0];
+                $user = $user[0];
 
-            // проверка хэша введенного пароля с паролем из БД
-            if (password_verify($formPass, $user['password'])) {
-                // сохраняем в сессию данные пользователя. авторизация пройдена
-                $_SESSION['user'] = $user;
-                header("Location: /index.php?success=true");
-                die();
+                // проверка хэша введенного пароля с паролем из БД
+                if (password_verify($formPass, $user['password'])) {
+                    // сохраняем в сессию данные пользователя. авторизация пройдена
+                    $_SESSION['user'] = $user;
+                    header("Location: /index.php?success=true");
+                    die();
+                } else {
+                    $errors['password'] = 'Неверный пароль';
+                }
+
+            } else {
+                $errors['email'] = 'Такой email не зарегистрирован';
             }
-            else {
-                $errors['password'] = 'Неверный пароль';
-            }
+
 
         } else {
-            $errors['email'] = 'Такой email не зарегистрирован';
+            // если нет поля email или password в POST
+            $errors['email'] = 'Введите email';
+            $errors['password'] = 'Введите пароль';
         }
 
     }
