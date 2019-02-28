@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errors[$field] = "Введите пароль";
         }
 
-        if ($field == "email" && (empty($value) || !filter_var($value, FILTER_VALIDATE_EMAIL))) {
+        if ($field == "email" && ((empty($value) || !filter_var($value, FILTER_VALIDATE_EMAIL)))) {
             $errors[$field] = "Введите валидный email";
         }
 
