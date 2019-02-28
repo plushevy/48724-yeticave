@@ -148,6 +148,7 @@ function customTimeLeft ($str) {
     return $result;
 };
 
+
 /**
  * Вывод ошибки 404 с завершением скрипта
  */
@@ -206,6 +207,7 @@ function dateToTimestamp($str) {;
     $dt = date_create($str);
     return date_format($dt, "Y-m-d 23:59:59");
 }
+
 
 /**
  * Экранирование и очистка от пробелов

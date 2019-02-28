@@ -1,9 +1,14 @@
 <?php
 
-require_once('functions.php');
-require_once('data.php');
-require_once('mysql_helper.php');
-require_once('db-connect.php');
+require_once('init.php');
+
+if (!$isAuth) {
+    // незалогиненным вход запрещен
+    // http_response_code(403);
+    header("Location: login.php");
+    die;
+}
+
 
 define('MAX_FILE_SIZE', 2 * 1024 * 1024); // 2mb
 define('UPLOAD_IMG_DIR' , './img/');
@@ -44,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     foreach ($_POST as $field => $value) {
 
-        $value = trim($value);
+        $value = cleanVal($value);
 
         if (in_array($field, $requiredFields) && empty($value)) {
             $errors[$field] = 'Заполните это поле';
@@ -104,13 +109,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             move_uploaded_file($fileTmpName, $pathToFile);
 
             // готовим данные для отправки
-            $dt_end = dateToTimestamp(strip_tags($_POST['lot-date']));
-            $label = strip_tags($_POST['lot-name']);
-            $desc = strip_tags($_POST['message']);
+            $dt_end = dateToTimestamp(cleanVal($_POST['lot-date']));
+            $label = cleanVal($_POST['lot-name']);
+            $desc = cleanVal($_POST['message']);
             $imgUrl = $pathToFile;
             $startPrice = (int) $_POST['lot-rate'];
             $betStep = (int) $_POST['lot-step'];
-            $idUser = rand(1, 2);  // временно
+            $idUser = $userId;  // id из SESSION
             $idCategory = (int) $_POST['category'];
 
 
@@ -138,18 +143,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // данные для передачи в шаблон
-    $name = ($_POST['lot-name']) ? strip_tags($_POST['lot-name']) : '';
-    $selectedCategory = ($_POST['category']) ? strip_tags($_POST['category']) : '' ;
-    $message = ($_POST['message']) ? strip_tags($_POST['message']) : '';
-    $rate = ($_POST['lot-rate']) ? strip_tags($_POST['lot-rate']) : '';
-    $step = ($_POST['lot-step']) ? strip_tags($_POST['lot-step']) : '';
-    $date = ($_POST['lot-date']) ? strip_tags($_POST['lot-date']) : '';
+    $name = ($_POST['lot-name']) ? cleanVal($_POST['lot-name']) : '';
+    $selectedCategory = ($_POST['category']) ? cleanVal($_POST['category']) : '' ;
+    $message = ($_POST['message']) ? cleanVal($_POST['message']) : '';
+    $rate = ($_POST['lot-rate']) ? cleanVal($_POST['lot-rate']) : '';
+    $step = ($_POST['lot-step']) ? cleanVal($_POST['lot-step']) : '';
+    $date = ($_POST['lot-date']) ? cleanVal($_POST['lot-date']) : '';
 
 }
+
+// список категорий
+$navCategories = renderTemplate(
+    'nav.php',
+    [
+        'categories' => $categories
+    ]);
+
 
 $pageContent = renderTemplate(
     'add.php',
     [
+        'navCategories' => $navCategories,
         'categories' => $categories,
         'errors' => $errors,
         'name' => $name,
@@ -165,7 +179,7 @@ $layoutContent = renderTemplate(
     'layout.php',
     [
         'content' => $pageContent,
-        'categories' => $categories,
+        'navCategories' => $navCategories,
         'isAuth' => $isAuth,
         'userName' => $userName,
         'title' => 'Yeticave | Добавление лота'

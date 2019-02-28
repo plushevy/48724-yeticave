@@ -1,7 +1,7 @@
 <?php
 
 require_once('functions.php');
-require_once('data.php');
+require_once('init.php');
 require_once('mysql_helper.php');
 require_once('db-connect.php');
 
@@ -52,10 +52,18 @@ $bets = dbGetData($link, $sqlGetBets, [$id]);
 $categories = dbGetData($link, $sqlGetCategories);
 
 
+// список категорий
+$navCategories = renderTemplate(
+    'nav.php',
+    [
+        'categories' => $categories
+    ]);
+
+
 $lotPageContent = renderTemplate(
     'lot.php',
     [
-        'categories' => $categories,
+        'navCategories' => $navCategories,
         'lot' => $lot,
         'bets' => $bets
     ]);
@@ -64,7 +72,7 @@ $layoutContent = renderTemplate(
     'layout.php',
     [
         'content' => $lotPageContent,
-        'categories' => $categories,
+        'navCategories' => $navCategories,
         'isAuth' => $isAuth,
         'userName' => $userName,
         'title' => 'Yeticave | ' . $lot['name']
