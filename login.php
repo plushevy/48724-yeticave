@@ -57,12 +57,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
 
 
-        } else {
-            // если нет поля email или password в POST
-            $errors['email'] = 'Введите email';
-            $errors['password'] = 'Введите пароль';
         }
 
+    } else {
+        // если нет поля email или password в POST
+        $errors['email'] = 'Введите email';
+        $errors['password'] = 'Введите пароль';
     }
 
 
