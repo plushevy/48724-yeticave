@@ -12,26 +12,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (isset($_POST['email']) && isset($_POST['password'])) {
 
-        foreach ($_POST as $field => $value) {
+        $formEmail = cleanVal($_POST['email']);
+        $formPass = cleanVal($_POST['password']);
 
-            $value = cleanVal($value);
+        if (empty($formPass)) {
+            $errors['password'] = "Введите пароль";
+        }
 
-            if ($field == "password" && empty($value)) {
-                $errors[$field] = "Введите пароль";
-            }
-
-            if ($field == "email" && ((empty($value) || !filter_var($value, FILTER_VALIDATE_EMAIL)))) {
-                $errors[$field] = "Введите валидный email";
-            }
-
+        if (empty($formEmail) || !filter_var($formEmail, FILTER_VALIDATE_EMAIL)) {
+            $errors['email'] = "Введите валидный email";
         }
 
         // если поля заполнены и нет ошибок
         if (!count($errors)) {
-
-            // готовим данные для отправки
-            $formEmail = cleanVal($_POST['email']);
-            $formPass = cleanVal($_POST['password']);
 
             // проверка что такой  email в БД есть
             $sqlCheckEmail = "SELECT * FROM users WHERE email = ?";
@@ -53,22 +46,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
 
             } else {
+                // если юзера в БД не нашли
                 $errors['email'] = 'Такой email не зарегистрирован';
             }
 
 
         }
 
+        // данные для передачи в шаблон
+        $email = ($_POST['email']) ? cleanVal($_POST['email']) : '';
+        $password = ($_POST['password']) ? cleanVal($_POST['password']) : '';
+
     } else {
         // если нет поля email или password в POST
         $errors['email'] = 'Введите email';
         $errors['password'] = 'Введите пароль';
     }
-
-
-    // данные для передачи в шаблон
-    $email = ($_POST['email']) ? cleanVal($_POST['email']) : '';
-    $password = ($_POST['password']) ? cleanVal($_POST['password']) : '';
 
 }
 
