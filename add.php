@@ -142,14 +142,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errors['image'] = "Загрузите фотографию лота";
     }
 
-    // данные для передачи в шаблон
-    $name = ($_POST['lot-name']) ? cleanVal($_POST['lot-name']) : '';
-    $selectedCategory = ($_POST['category']) ? cleanVal($_POST['category']) : '' ;
-    $message = ($_POST['message']) ? cleanVal($_POST['message']) : '';
-    $rate = ($_POST['lot-rate']) ? cleanVal($_POST['lot-rate']) : '';
-    $step = ($_POST['lot-step']) ? cleanVal($_POST['lot-step']) : '';
-    $date = ($_POST['lot-date']) ? cleanVal($_POST['lot-date']) : '';
 
+    // данные для передачи в шаблон
+    $name = cleanVal($_POST['lot-name']) ?? '';
+    $selectedCategory = cleanVal($_POST['category']) ?? '';
+    $message = cleanVal($_POST['message']) ?? '';
+    $rate = cleanVal($_POST['lot-rate']) ?? '';
+    $step = cleanVal($_POST['lot-step']) ?? '';
+    $date = cleanVal($_POST['lot-date']) ?? '';
 }
 
 // список категорий

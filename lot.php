@@ -1,15 +1,31 @@
 <?php
 
-require_once('functions.php');
 require_once('init.php');
-require_once('mysql_helper.php');
-require_once('db-connect.php');
+
 
 if (!isset($_GET['id'])) {
     showError404();
 }
 
-$id = (int)$_GET['id'];
+$id = (int) $_GET['id'];
+$errors = [];
+$cost = '';
+$minBet = 0;
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+    if (!$isAuth) {
+        // незалогиненным нельзя сделать ставку
+        // http_response_code(403);
+        header("Location: login.php");
+        die;
+    }
+
+    $cost = cleanVal($_POST['cost']) ?? '';
+    $id = cleanVal($_POST['id']) ?? '';
+
+}
+
 
 // запрос для получения лота по id
 $sqlGetLot = "
@@ -50,6 +66,11 @@ if (!$lot) {
 $lot = $lot[0]; // массив $lot состоит из 1 элемента
 $bets = dbGetData($link, $sqlGetBets, [$id]);
 $categories = dbGetData($link, $sqlGetCategories);
+$minBet = $lot['price'] + $lot['bet_step'];
+
+
+
+
 
 
 // список категорий
@@ -65,7 +86,10 @@ $lotPageContent = renderTemplate(
     [
         'navCategories' => $navCategories,
         'lot' => $lot,
-        'bets' => $bets
+        'id' => $id,
+        'minBet' => $minBet,
+        'bets' => $bets,
+        'cost' => $cost
     ]);
 
 $layoutContent = renderTemplate(

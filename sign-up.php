@@ -28,6 +28,11 @@ $isValidRequiredFields = false;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
+    $name = cleanVal($_POST['name']) ?? '';
+    $email = cleanVal($_POST['email']) ?? '';
+    $message = cleanVal($_POST['message']) ?? '';
+    $password = cleanVal($_POST['password']) ?? '';
+
 
     foreach ($_POST as $field => $value) {
 
@@ -83,30 +88,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
     // готовим данные для отправки
-    $userEmail = cleanVal($_POST['email']);
-    $userName = cleanVal($_POST['name']);
     $userPass = password_hash(cleanVal($_POST['password']), PASSWORD_DEFAULT);
-    $userContacts = cleanVal($_POST['message']);
     $imgUrl = $pathToFile;
 
 
     // проверка что такого email в БД нет
     $sqlCheckEmail = "SELECT * FROM users WHERE email = ?";
-    $isEmailExists = dbGetData($link, $sqlCheckEmail, [$userEmail]);
+    $isEmailExists = dbGetData($link, $sqlCheckEmail, [$email]);
 
-    if ($isEmailExists) {
-        $errors['email'] = "Такой email уже зарегистрирован";
-    }
 
-    // Если нет ошибок, отправляем данные в БД
-    if (!count($errors)) {
+    // Если нет ошибок и в бд нет такого email, отправляем данные в БД
+    if (!count($errors) && !$isEmailExists) {
 
         $addUserSql = "INSERT INTO users 
                           (email, name, password, contacts, img_url) 
                         VALUES
                            (?, ?, ?, ?, ?)";
 
-        $newUserId = dbInsertData($link, $addUserSql, [$userEmail, $userName, $userPass, $userContacts, $imgUrl]);
+        $newUserId = dbInsertData($link, $addUserSql, [$email, $name, $userPass, $message, $imgUrl]);
 
         // если все ок - переадресация на форму входа (еще нет)
         if ($newUserId && empty($errors)) {
@@ -114,13 +113,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             die();
         }
 
-    }
+    } else {
 
-    // данные для передачи в шаблон
-    $name = ($_POST['name']) ? cleanVal($_POST['name']) : '';
-    $email = ($_POST['email']) ? cleanVal($_POST['email']) : '';
-    $message = ($_POST['message']) ? cleanVal($_POST['message']) : '';
-    $password = ($_POST['password']) ? cleanVal($_POST['password']) : '';
+        $errors['email'] = "Такой email уже зарегистрирован";
+    }
 
 }
 

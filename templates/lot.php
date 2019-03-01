@@ -1,3 +1,9 @@
+<?php
+
+$costErr = $errors['cost'] ?? '';
+$itemErrClass = 'form__item--invalid';
+
+?>
 <main>
 
     <?= $navCategories; ?>
@@ -23,18 +29,21 @@
                             <span class="lot-item__cost"><?= formatPrice($lot['price']); ?></span>
                         </div>
                         <div class="lot-item__min-cost">
-                            Мин. ставка <span><?= $lot['price'] + $lot['bet_step'] ?></span>
+                            Мин. ставка <span><?=$minBet;?></span>
                         </div>
                     </div>
-                    <form class="lot-item__form" action="https://echo.htmlacademy.ru" method="post">
-                        <p class="lot-item__form-item form__item form__item--invalid">
+
+                    <form class="lot-item__form" action="lot.php?id=<?=$id;?>" method="post">
+                        <p class="lot-item__form-item form__item <?php if ($costErr) {echo $itemErrClass;} ?>">
                             <label for="cost">Ваша ставка</label>
-                            <input id="cost" type="text" name="cost"
-                                   placeholder="<?= $lot['price'] + $lot['bet_step'] ?>">
-                            <span class="form__error">Введите наименование лота</span>
+                            <input id="cost" type="text" name="cost" value="<?=$cost;?>"
+                                   placeholder="<?= $minBet;?>">
+                            <input id="lot-id" type="hidden" name="id" value="<?=$id;?>">
+                            <span class="form__error"><?=$costErr;?></span>
                         </p>
                         <button type="submit" class="button">Сделать ставку</button>
                     </form>
+
                 </div>
                 <?php if (count($bets) > 0) : ?>
                     <div class="history">
