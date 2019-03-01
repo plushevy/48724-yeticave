@@ -33,16 +33,18 @@ $itemErrClass = 'form__item--invalid';
                         </div>
                     </div>
 
-                    <form class="lot-item__form" action="lot.php?id=<?=$lotId;?>" method="post">
-                        <p class="lot-item__form-item form__item <?php if ($costErr) {echo $itemErrClass;} ?>">
-                            <label for="cost">Ваша ставка</label>
-                            <input id="cost" type="text" name="cost" value="<?=$cost;?>"
-                                   placeholder="<?= $minBet;?>">
-                            <input id="lot-id" type="hidden" name="id" value="<?=$lotId;?>">
-                            <span class="form__error"><?=$costErr;?></span>
-                        </p>
-                        <button type="submit" class="button">Сделать ставку</button>
-                    </form>
+                    <?php if ($showAddBet) : ?>
+                        <form class="lot-item__form" action="lot.php?id=<?=$lotId;?>" method="post">
+                            <p class="lot-item__form-item form__item <?php if ($costErr) {echo $itemErrClass;} ?>">
+                                <label for="cost">Ваша ставка</label>
+                                <input id="cost" type="text" name="cost" value="<?=$cost;?>"
+                                       placeholder="<?= $minBet;?>">
+                                <input id="lot-id" type="hidden" name="id" value="<?=$lotId;?>">
+                                <span class="form__error"><?=$costErr;?></span>
+                            </p>
+                            <button type="submit" class="button">Сделать ставку</button>
+                        </form>
+                    <?php endif; ?>
 
                 </div>
                 <?php if (count($bets) > 0) : ?>

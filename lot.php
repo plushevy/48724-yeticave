@@ -2,10 +2,9 @@
 
 require_once('init.php');
 
-$lotId = null;
 $errors = [];
 $cost = '';
-$minBet = 0;
+$showAddBet = false;
 
 // в POST проверяем авторизацию и id , в GET - id
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -33,6 +32,7 @@ if (!isset($lotId)) {
 $sqlGetLot = "
         SELECT
           l.id,
+          l.id_user,
           l.label as name,
           l.dt_end,
           l.description,
@@ -53,6 +53,7 @@ $sqlGetCategories = "SELECT * FROM categories";
 $sqlGetBets = "
     SELECT
       u.name,
+      u.id,
       b.last_price as price,
       b.dt_create
     FROM bets b
@@ -70,6 +71,19 @@ $lot = $lot[0]; // массив $lot состоит из 1 элемента
 $bets = dbGetData($link, $sqlGetBets, [$lotId]);
 $categories = dbGetData($link, $sqlGetCategories);
 $minBet = $lot['price'] + $lot['bet_step'];
+$lotAuthor = $lot['id_user'];
+$lotEndDt = $lot['dt_end'];
+$isBetAuthor = false;
+foreach ( $bets as $bet) {
+    if ($bet['id'] == $userId){
+        $isBetAuthor = true;
+    }
+}
+
+// если авторизован, лот не кончился, не создал лот и ставку - то Блок добавления ставки показывать
+if (validateEndDate($lotEndDt) && $isAuth && $userId != $lotAuthor && !$isBetAuthor) {
+    $showAddBet = true;
+}
 
 // Если POST проверяем новую ставку
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -117,7 +131,8 @@ $lotPageContent = renderTemplate(
         'lotId' => $lotId,
         'minBet' => $minBet,
         'bets' => $bets,
-        'cost' => $cost
+        'cost' => $cost,
+        'showAddBet' => $showAddBet
     ]);
 
 $layoutContent = renderTemplate(

@@ -6,7 +6,8 @@
  * @param $data
  * @return false|string
  */
-function renderTemplate($filename, $data) {
+function renderTemplate($filename, $data)
+{
     $filename = 'templates/' . $filename;
     $result = '';
 
@@ -29,14 +30,15 @@ function renderTemplate($filename, $data) {
  * @param $num
  * @return string
  */
-function formatPrice($num){
+function formatPrice($num)
+{
 
     $currency = '₽';
     $num = ceil($num);
 
     if ($num >= 1000) {
         // форматирование числа вида 99 999
-        $num = number_format($num , 0 , "." , " " );
+        $num = number_format($num, 0, ".", " ");
     }
 
     return "{$num} {$currency}";
@@ -47,7 +49,8 @@ function formatPrice($num){
  * @param string $endTime
  * @return string
  */
-function showTimeLeft($endTime = 'tomorrow') {
+function showTimeLeft($endTime = 'tomorrow')
+{
 
     date_default_timezone_set('Europe/Moscow');
 
@@ -69,7 +72,7 @@ function showTimeLeft($endTime = 'tomorrow') {
 
     if ($timeLeft > 0) {
         $hours = floor($timeLeft / 3600);
-        $mins = floor(($timeLeft - ($hours * 3600))/ 60 );
+        $mins = floor(($timeLeft - ($hours * 3600)) / 60);
         $result = addZeroLeft($hours) . ':' . addZeroLeft($mins);
     }
 
@@ -82,8 +85,9 @@ function showTimeLeft($endTime = 'tomorrow') {
  * @param number $num
  * @return string
  */
-function addZeroLeft($num) {
-    return str_pad($num, 2,'0', STR_PAD_LEFT);
+function addZeroLeft($num)
+{
+    return str_pad($num, 2, '0', STR_PAD_LEFT);
 }
 
 
@@ -93,7 +97,8 @@ function addZeroLeft($num) {
  * @param array $variants - Массив словоформ
  * @return string
  */
-function setEnding($number, array $variants) {
+function setEnding($number, array $variants)
+{
 
     $num1 = $number % 100;
     $num2 = $number % 10;
@@ -123,15 +128,16 @@ function setEnding($number, array $variants) {
  * @param string $str - timestamp из БД в виде строки
  * @return string
  */
-function customTimeLeft ($str) {
+function customTimeLeft($str)
+{
     $minEnds = ['минуту', 'минуты', 'минут'];
     $hourEnds = ['час', 'часа', 'часов'];
     $now = time();
     $sec = strtotime($str);
-    $timeLeft =  $now - $sec;
+    $timeLeft = $now - $sec;
     $days = floor($timeLeft / 86400);
     $hours = floor($timeLeft / 3600);
-    $mins = floor($timeLeft / 60 );
+    $mins = floor($timeLeft / 60);
     $result = '';
 
     if ($hours > 23) {
@@ -141,21 +147,26 @@ function customTimeLeft ($str) {
         if ($mins > 59) {
             $result = $hours . setEnding($hours, $hourEnds) . ' назад';
         } else {
-            $result = $mins. setEnding($mins, $minEnds) . ' назад';
+            $result = $mins . setEnding($mins, $minEnds) . ' назад';
         }
     }
 
     return $result;
-};
+}
+
+;
 
 
 /**
  * Вывод ошибки 404 с завершением скрипта
  */
-function showError404() {
+function showError404()
+{
     header("HTTP/1.1 404 Not Found");
     die("Такой страницы не существует. Ошибка - " . http_response_code());
-};
+}
+
+;
 
 
 /**
@@ -163,7 +174,8 @@ function showError404() {
  * @param string $str
  * @return string
  */
-function getExtensionFromMime($str) {
+function getExtensionFromMime($str)
+{
     preg_match('/.*\/(\w{1,4})$/i', $str, $matches);
     $mime = (isset($matches[1])) ? $matches[1] : '';
     return $mime;
@@ -175,14 +187,15 @@ function getExtensionFromMime($str) {
  * @param string $str
  * @return bool
  */
-function checkEndDate($str){
+function checkEndDate($str)
+{
 
     date_default_timezone_set('Europe/Moscow');
 
     // $pattern = '/^\d{2}\.\d{2}\.\d{4}$/';
     $pattern = '/^\d{4}-\d{2}-\d{2}$/';
 
-    if ( !preg_match($pattern, $str)) {
+    if (!preg_match($pattern, $str)) {
         return false;
     }
 
@@ -204,7 +217,9 @@ function checkEndDate($str){
  * @param string $str
  * @return string
  */
-function dateToTimestamp($str) {;
+function dateToTimestamp($str)
+{
+    ;
     $dt = date_create($str);
     return date_format($dt, "Y-m-d 23:59:59");
 }
@@ -215,8 +230,23 @@ function dateToTimestamp($str) {;
  * @param string $str
  * @return string
  */
-function cleanVal($str) {
+function cleanVal($str)
+{
     return strip_tags(trim($str));
+}
+
+
+/**
+ * Проверка конечной даты на > текущей
+ * @param string $str
+ * @return bool
+ */
+function validateEndDate($str)
+{
+    $now = strtotime('now');
+    $endDt = strtotime($str);
+    $diff = $endDt - $now;
+    return $diff > 0;
 }
 
 
@@ -224,7 +254,8 @@ function cleanVal($str) {
  * Временная ф-ция для дебага
  * @param $arr
  */
-function debug($arr) {
+function debug($arr)
+{
     echo "<pre>";
     var_dump($arr);
     echo "</pre>";
