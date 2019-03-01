@@ -93,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Ставка должна быть больше $minBet
     $filter_options = [
-        'options' => array('min_range' > $minBet)
+        'options' => array('min_range' => $minBet)
     ];
 
     if (!filter_var($cost, FILTER_VALIDATE_INT, $filter_options)) {
