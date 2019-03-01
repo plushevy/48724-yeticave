@@ -1,20 +1,38 @@
 <?php
 
-require_once('functions.php');
 require_once('init.php');
-require_once('mysql_helper.php');
-require_once('db-connect.php');
 
-if (!isset($_GET['id'])) {
+$errors = [];
+$cost = '';
+$showAddBet = false;
+
+// в POST проверяем авторизацию и id , в GET - id
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+    if (!$isAuth) {
+        // незалогиненным нельзя сделать ставку
+        // http_response_code(403);
+        header("Location: login.php");
+        die;
+    }
+
+    $lotId = (int)$_POST['id'];
+
+} else {
+
+    $lotId = (int)$_GET['id'];
+}
+
+if (!isset($lotId)) {
     showError404();
 }
 
-$id = (int)$_GET['id'];
 
 // запрос для получения лота по id
 $sqlGetLot = "
         SELECT
           l.id,
+          l.id_user,
           l.label as name,
           l.dt_end,
           l.description,
@@ -35,6 +53,7 @@ $sqlGetCategories = "SELECT * FROM categories";
 $sqlGetBets = "
     SELECT
       u.name,
+      u.id as id_user,
       b.last_price as price,
       b.dt_create
     FROM bets b
@@ -43,13 +62,58 @@ $sqlGetBets = "
     WHERE l.id = ?
     ORDER BY dt_create DESC";
 
-$lot = dbGetData($link, $sqlGetLot, [$id]);
+$lot = dbGetData($link, $sqlGetLot, [$lotId]);
 if (!$lot) {
     showError404();
 }
+
 $lot = $lot[0]; // массив $lot состоит из 1 элемента
-$bets = dbGetData($link, $sqlGetBets, [$id]);
+$bets = dbGetData($link, $sqlGetBets, [$lotId]);
 $categories = dbGetData($link, $sqlGetCategories);
+$minBet = $lot['price'] + $lot['bet_step'];
+$lotAuthor = $lot['id_user'];
+$lotEndDt = $lot['dt_end'];
+$isBetAuthor = false;
+foreach ( $bets as $bet) {
+    if ($bet['id_user'] == $userId){
+        $isBetAuthor = true;
+        break;
+    }
+}
+
+// если авторизован, лот не кончился, не создал лот и ставку - то Блок добавления ставки показывать
+if (validateEndDate($lotEndDt) && $isAuth && $userId != $lotAuthor && !$isBetAuthor) {
+    $showAddBet = true;
+}
+
+// Если POST проверяем новую ставку
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+    $cost = cleanVal($_POST['cost']) ?? '';
+
+    // Ставка должна быть больше $minBet
+    $filter_options = [
+        'options' => array('min_range' => $minBet)
+    ];
+
+    if (!filter_var($cost, FILTER_VALIDATE_INT, $filter_options)) {
+        $errors['cost'] = 'Введите число больше мин. ставки';
+    }
+
+    // если нет ошибко - добавляем в БД
+    if (empty($errors)) {
+
+        $addBetSql = "INSERT INTO bets 
+                          (last_price, id_user, id_lot)
+                        VALUES
+                          (?, ?, ? )";
+
+        $newBetId = dbInsertData($link, $addBetSql, [$cost, $userId, $lotId]);
+        header("Location: /lot.php?id=" . $lotId);
+        die();
+    }
+
+}
 
 
 // список категорий
@@ -65,7 +129,12 @@ $lotPageContent = renderTemplate(
     [
         'navCategories' => $navCategories,
         'lot' => $lot,
-        'bets' => $bets
+        'errors' => $errors,
+        'lotId' => $lotId,
+        'minBet' => $minBet,
+        'bets' => $bets,
+        'cost' => $cost,
+        'showAddBet' => $showAddBet
     ]);
 
 $layoutContent = renderTemplate(
