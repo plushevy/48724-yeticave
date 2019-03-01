@@ -53,7 +53,7 @@ $sqlGetCategories = "SELECT * FROM categories";
 $sqlGetBets = "
     SELECT
       u.name,
-      u.id,
+      u.id as id_user,
       b.last_price as price,
       b.dt_create
     FROM bets b
@@ -75,7 +75,7 @@ $lotAuthor = $lot['id_user'];
 $lotEndDt = $lot['dt_end'];
 $isBetAuthor = false;
 foreach ( $bets as $bet) {
-    if ($bet['id'] == $userId){
+    if ($bet['id_user'] == $userId){
         $isBetAuthor = true;
         break;
     }
