@@ -2,16 +2,12 @@
 
 require_once('init.php');
 
-
-if (!isset($_GET['id'])) {
-    showError404();
-}
-
-$id = (int) $_GET['id'];
+$lotId = null;
 $errors = [];
 $cost = '';
 $minBet = 0;
 
+// в POST проверяем авторизацию и id , в GET - id
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (!$isAuth) {
@@ -21,9 +17,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         die;
     }
 
-    $cost = cleanVal($_POST['cost']) ?? '';
-    $id = cleanVal($_POST['id']) ?? '';
+    $lotId = (int)$_POST['id'];
 
+} else {
+
+    $lotId = (int)$_GET['id'];
+}
+
+if (!isset($lotId)) {
+    showError404();
 }
 
 
@@ -59,18 +61,43 @@ $sqlGetBets = "
     WHERE l.id = ?
     ORDER BY dt_create DESC";
 
-$lot = dbGetData($link, $sqlGetLot, [$id]);
+$lot = dbGetData($link, $sqlGetLot, [$lotId]);
 if (!$lot) {
     showError404();
 }
+
 $lot = $lot[0]; // массив $lot состоит из 1 элемента
-$bets = dbGetData($link, $sqlGetBets, [$id]);
+$bets = dbGetData($link, $sqlGetBets, [$lotId]);
 $categories = dbGetData($link, $sqlGetCategories);
 $minBet = $lot['price'] + $lot['bet_step'];
 
+// Если POST проверяем новую ставку
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
+    $cost = cleanVal($_POST['cost']) ?? '';
 
+    $filter_options = [
+        'options' => array('min_range' => 0)
+    ];
 
+    if (!filter_var($cost, FILTER_VALIDATE_INT, $filter_options) || $cost < $minBet) {
+        $errors['cost'] = 'Введите число больше мин. ставки';
+    }
+
+    // если нет ошибко - добавляем в БД
+    if (empty($errors)) {
+
+        $addBetSql = "INSERT INTO bets 
+                          (last_price, id_user, id_lot)
+                        VALUES
+                          (?, ?, ? )";
+
+        $newBetId = dbInsertData($link, $addBetSql, [$cost, $userId, $lotId]);
+        header("Location: /lot.php?id=" . $lotId);
+        die();
+    }
+
+}
 
 
 // список категорий
@@ -86,7 +113,8 @@ $lotPageContent = renderTemplate(
     [
         'navCategories' => $navCategories,
         'lot' => $lot,
-        'id' => $id,
+        'errors' => $errors,
+        'lotId' => $lotId,
         'minBet' => $minBet,
         'bets' => $bets,
         'cost' => $cost

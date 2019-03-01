@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         if ($field == "lot-date" && !checkEndDate($value)) {
-            $errors[$field] = "Дата (дд.мм.гггг) больше текушей минимум на 1 день";
+            $errors[$field] = "Дата (мм/дд/гггг) больше текушей минимум на 1 день";
         }
 
         // проверка на положительные числа

@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // если все ок - переадресация на форму входа (еще нет)
         if ($newUserId && empty($errors)) {
-            header("Location: /");
+            header("Location: /login.php");
             die();
         }
 

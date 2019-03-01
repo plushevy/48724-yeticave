@@ -179,7 +179,8 @@ function checkEndDate($str){
 
     date_default_timezone_set('Europe/Moscow');
 
-    $pattern = '/^\d{2}\.\d{2}\.\d{4}$/';
+    // $pattern = '/^\d{2}\.\d{2}\.\d{4}$/';
+    $pattern = '/^\d{4}-\d{2}-\d{2}$/';
 
     if ( !preg_match($pattern, $str)) {
         return false;
