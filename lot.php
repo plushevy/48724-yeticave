@@ -77,6 +77,7 @@ $isBetAuthor = false;
 foreach ( $bets as $bet) {
     if ($bet['id'] == $userId){
         $isBetAuthor = true;
+        break;
     }
 }
 
@@ -90,11 +91,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $cost = cleanVal($_POST['cost']) ?? '';
 
+    // Ставка должна быть больше $minBet
     $filter_options = [
-        'options' => array('min_range' => 0)
+        'options' => array('min_range' > $minBet)
     ];
 
-    if (!filter_var($cost, FILTER_VALIDATE_INT, $filter_options) || $cost < $minBet) {
+    if (!filter_var($cost, FILTER_VALIDATE_INT, $filter_options)) {
         $errors['cost'] = 'Введите число больше мин. ставки';
     }
 
