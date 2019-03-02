@@ -16,11 +16,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         die;
     }
 
-    $lotId = $_POST['id'] ?? '';
+    $lotId = (int) ($_POST['id'] ?? '');
 
 } else {
 
-    $lotId = $_GET['id'] ?? '';
+    $lotId = (int) ($_GET['id'] ?? '');
 }
 
 if (!isset($lotId)) {
