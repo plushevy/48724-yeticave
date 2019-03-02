@@ -89,7 +89,7 @@ if (validateEndDate($lotEndDt) && $isAuth && $userId != $lotAuthor && !$isBetAut
 // Если POST проверяем новую ставку
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $cost = cleanVal($_POST['cost']) ?? '';
+    $cost = cleanVal($_POST['cost'] ?? '');
 
     // Ставка должна быть больше $minBet
     $filter_options = [

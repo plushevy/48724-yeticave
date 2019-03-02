@@ -28,10 +28,10 @@ $isValidRequiredFields = false;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $name = cleanVal($_POST['name']) ?? '';
-    $email = cleanVal($_POST['email']) ?? '';
-    $message = cleanVal($_POST['message']) ?? '';
-    $password = cleanVal($_POST['password']) ?? '';
+    $name = cleanVal($_POST['name'] ?? '');
+    $email = cleanVal($_POST['email'] ?? '');
+    $message = cleanVal($_POST['message'] ?? '');
+    $password = cleanVal($_POST['password'] ?? '');
 
 
     foreach ($_POST as $field => $value) {
