@@ -3,8 +3,8 @@
 /**
  * Создает подготовленное выражение на основе готового SQL запроса и переданных данных
  *
- * @param $link mysqli Ресурс соединения
- * @param $sql string SQL запрос с плейсхолдерами вместо значений
+ * @param resource $link mysqli Ресурс соединения
+ * @param resource $sql SQL запрос с плейсхолдерами вместо значений
  * @param array $data Данные для вставки на место плейсхолдеров
  *
  * @return mysqli_stmt Подготовленное выражение
@@ -49,8 +49,8 @@ function prepareStmt($link, $sql, $data = [])
 
 /**
  * Получение данных из БД
- * @param $link Ресурс соединения mysqli
- * @param $sql string SQL запрос с плейсхолдерами вместо значений
+ * @param resource $link Ресурс соединения mysqli
+ * @param resource $sql SQL запрос с плейсхолдерами вместо значений
  * @param array $data Данные для вставки на место плейсхолдеров
  * @return array|null
  */
@@ -67,8 +67,8 @@ function dbGetData($link, $sql, $data = [])
 
 /**
  * Добавление записи в БД и получение Id последней записи
- * @param $link Ресурс соединения mysqli
- * @param $sql string SQL запрос с плейсхолдерами вместо значений
+ * @param resource $link Ресурс соединения mysqli
+ * @param resource $sql SQL запрос с плейсхолдерами вместо значений
  * @param array $data Данные для вставки на место плейсхолдеров
  * @return int|null|string
  */
@@ -85,7 +85,7 @@ function dbInsertData($link, $sql, $data = [])
 
 /**
  * Показ ошибки и остановка скрипта
- * @param $link Ресурс соединения mysqli
+ * @param resource $link Ресурс соединения mysqli
  */
 function showError($link){
 
@@ -98,8 +98,8 @@ function showError($link){
 
 /**
  * Обертка mysqli_stmt_get_result с выводом ошибки
- * @param $link Ресурс соединения mysqli
- * @param $stmt Подготовленное SQL выражение
+ * @param resource $link Ресурс соединения mysqli
+ * @param resource $stmt Подготовленное SQL выражение
  * @return mysqli_result
  */
 function mysqliGetResult($link, $stmt) {

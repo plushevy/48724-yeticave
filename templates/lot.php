@@ -37,7 +37,7 @@ $itemErrClass = 'form__item--invalid';
                         <form class="lot-item__form" action="lot.php?id=<?=$lotId;?>" method="post">
                             <p class="lot-item__form-item form__item <?php if ($costErr) {echo $itemErrClass;} ?>">
                                 <label for="cost">Ваша ставка</label>
-                                <input id="cost" type="text" name="cost" value="<?=$cost;?>"
+                                <input id="cost" type="text" name="cost" value="<?=$minBet;?>"
                                        placeholder="<?= $minBet;?>">
                                 <input id="lot-id" type="hidden" name="id" value="<?=$lotId;?>">
                                 <span class="form__error"><?=$costErr;?></span>
