@@ -6,7 +6,7 @@ $search = cleanVal($_GET['search'] ?? '');
 $currentPage = (int) ($_GET['page'] ?? 1);
 $items = [];
 $pages = [1];
-$pageItems = 3;
+$pageItems = 9;
 $pagesCount = 0;
 $offset = 0;
 $linkParam = "search.php?search={$search}&";
