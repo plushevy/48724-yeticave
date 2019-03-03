@@ -3,9 +3,33 @@
 require_once('init.php');
 
 $search = cleanVal($_GET['search'] ?? '');
+$currentPage = (int) ($_GET['page'] ?? 1);
 $items = [];
+$pages = [1];
+$pageItems = 3;
+$pagesCount = 0;
+$offset = 0;
+$linkParam = "search.php?search={$search}&";
 
 if ($search) {
+
+    // пагинация. узнаем кол-во лотов в ответе
+    $sqlGetCount = "
+        SELECT COUNT(*) as cnt
+        FROM lots l
+        WHERE l.dt_end > CURDATE() AND  MATCH (label, description) AGAINST(? IN BOOLEAN MODE)";
+
+    $itemsCount = dbGetData($link, $sqlGetCount, [$search]);
+    $itemsCount = $itemsCount[0]['cnt'] ?? 0;
+
+    //вычисляем смещение и кол-во страниц
+    $pagesCount = ceil($itemsCount / $pageItems);
+    $offset = ($currentPage - 1) * $pageItems;
+
+    $pages = range(1, $pagesCount);
+
+
+
     // запрос для получения списка новых лотов
     $sqlGetLots = "
                     SELECT l.id,
@@ -21,12 +45,12 @@ if ($search) {
                            JOIN categories c ON c.id = l.id_category
                     WHERE l.dt_end > CURDATE() AND  MATCH (label, description) AGAINST(? IN BOOLEAN MODE)
                     GROUP BY l.id
-                    ORDER BY l.dt_add DESC";
+                    ORDER BY l.dt_add DESC 
+                    LIMIT {$pageItems} OFFSET {$offset}";
 
     $items = dbGetData($link, $sqlGetLots, [$search]);
 
 }
-
 
 
 // запрос для получения списка катеорий
@@ -40,12 +64,24 @@ $navCategories = renderTemplate(
         'categories' => $categories
     ]);
 
+// пагинация
+$pagination = renderTemplate(
+    'pagination.php',
+    [
+        'pages' => $pages,
+        'pagesCount' => $pagesCount,
+        'currentPage' => $currentPage,
+        'linkParam' => $linkParam ?? '?'
+    ]);
+
 
 $mainPageContent = renderTemplate(
     'search.php',
     [
         'navCategories' => $navCategories,
         'items' => $items,
+        'pagesCount' => $pagesCount,
+        'pagination' => $pagination,
         'search' => $search
     ]);
 
