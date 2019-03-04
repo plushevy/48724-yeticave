@@ -10,7 +10,7 @@
             <ul class="lots__list">
 
                 <!-- если что-то найдено-->
-                <?php if ($items || !empty($items)) : ?>
+                <?php if ($items) : ?>
 
                     <!--этот список из массива с лотами-->
                     <?php foreach ($items as $key => $item) : ?>

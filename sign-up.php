@@ -52,8 +52,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($field == "email" && !filter_var($value, FILTER_VALIDATE_EMAIL)) {
             $errors[$field] = "Введите валидный email";
+        }
 
-        } else {
+        if ($field == "email" && !isset($errors['email'])) {
 
             // проверка что такого email в БД нет
             $sqlCheckEmail = "SELECT * FROM users WHERE email = ?";

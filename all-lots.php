@@ -2,13 +2,13 @@
 
 require_once('init.php');
 
-$categoryId = (int) ($_GET['id'] ?? '');
+$categoryId = $_GET['id'] ?? '';
 
 if (!isset($categoryId)) {
     showError404();
 }
 
-
+$categoryId = (int) $categoryId;
 $currentPage = (int) ($_GET['page'] ?? 1);
 $items = [];
 $pages = [1];
