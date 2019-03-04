@@ -16,11 +16,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         die;
     }
 
-    $lotId = (int)$_POST['id'];
+    $lotId = (int) ($_POST['id'] ?? '');
 
 } else {
 
-    $lotId = (int)$_GET['id'];
+    $lotId = (int) ($_GET['id'] ?? '');
 }
 
 if (!isset($lotId)) {
@@ -89,7 +89,7 @@ if (validateEndDate($lotEndDt) && $isAuth && $userId != $lotAuthor && !$isBetAut
 // Если POST проверяем новую ставку
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $cost = cleanVal($_POST['cost']) ?? '';
+    $cost = cleanVal($_POST['cost'] ?? '');
 
     // Ставка должна быть больше $minBet
     $filter_options = [

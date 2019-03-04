@@ -11,8 +11,8 @@ $password = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // данные для передачи в шаблон
-    $email = cleanVal($_POST['email']) ?? '';
-    $password = cleanVal($_POST['password']) ?? '';
+    $email = cleanVal($_POST['email'] ?? '');
+    $password = cleanVal($_POST['password'] ?? '');
 
 
     if (empty($password)) {

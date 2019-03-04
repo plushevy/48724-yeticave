@@ -28,10 +28,10 @@ $isValidRequiredFields = false;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $name = cleanVal($_POST['name']) ?? '';
-    $email = cleanVal($_POST['email']) ?? '';
-    $message = cleanVal($_POST['message']) ?? '';
-    $password = cleanVal($_POST['password']) ?? '';
+    $name = cleanVal($_POST['name'] ?? '');
+    $email = cleanVal($_POST['email'] ?? '');
+    $message = cleanVal($_POST['message'] ?? '');
+    $password = cleanVal($_POST['password'] ?? '');
 
 
     foreach ($_POST as $field => $value) {
@@ -52,6 +52,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($field == "email" && !filter_var($value, FILTER_VALIDATE_EMAIL)) {
             $errors[$field] = "Введите валидный email";
+        }
+
+        if ($field == "email" && !isset($errors['email'])) {
+
+            // проверка что такого email в БД нет
+            $sqlCheckEmail = "SELECT * FROM users WHERE email = ?";
+            $isEmailExists = dbGetData($link, $sqlCheckEmail, [$email]);
+
+            if ($isEmailExists) {
+                $errors['email'] = "Такой email уже зарегистрирован";
+            }
+
         }
 
     }
@@ -92,13 +104,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $imgUrl = $pathToFile;
 
 
-    // проверка что такого email в БД нет
-    $sqlCheckEmail = "SELECT * FROM users WHERE email = ?";
-    $isEmailExists = dbGetData($link, $sqlCheckEmail, [$email]);
-
-
-    // Если нет ошибок и в бд нет такого email, отправляем данные в БД
-    if (!count($errors) && !$isEmailExists) {
+    // Если нет ошибок
+    if (!count($errors)) {
 
         $addUserSql = "INSERT INTO users 
                           (email, name, password, contacts, img_url) 
@@ -113,11 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             die();
         }
 
-    } else {
-
-        $errors['email'] = "Такой email уже зарегистрирован";
     }
-
 }
 
 // запрос для получения списка катеорий

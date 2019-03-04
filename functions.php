@@ -2,9 +2,9 @@
 
 /**
  * renderTemplate - получение html из шаблона
- * @param $filename
- * @param $data
- * @return false|string
+ * @param string $filename
+ * @param array $data
+ * @return string
  */
 function renderTemplate($filename, $data)
 {
@@ -27,7 +27,7 @@ function renderTemplate($filename, $data)
 
 /**
  * formatPrice - Форматирование цены
- * @param $num
+ * @param string $num
  * @return string
  */
 function formatPrice($num)
@@ -82,7 +82,7 @@ function showTimeLeft($endTime = 'tomorrow')
 
 /**
  * Добавление нуля у чисел до 10
- * @param number $num
+ * @param string $num
  * @return string
  */
 function addZeroLeft($num)
@@ -93,7 +93,7 @@ function addZeroLeft($num)
 
 /**
  *  Ф-ция склонения окончаний
- * @param $number
+ * @param integer $number
  * @param array $variants - Массив словоформ
  * @return string
  */
@@ -252,7 +252,7 @@ function validateEndDate($str)
 
 /**
  * Временная ф-ция для дебага
- * @param $arr
+ * @param mixed $arr
  */
 function debug($arr)
 {

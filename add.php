@@ -144,12 +144,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
     // данные для передачи в шаблон
-    $name = cleanVal($_POST['lot-name']) ?? '';
-    $selectedCategory = cleanVal($_POST['category']) ?? '';
-    $message = cleanVal($_POST['message']) ?? '';
-    $rate = cleanVal($_POST['lot-rate']) ?? '';
-    $step = cleanVal($_POST['lot-step']) ?? '';
-    $date = cleanVal($_POST['lot-date']) ?? '';
+    $name = cleanVal($_POST['lot-name'] ?? '');
+    $selectedCategory = cleanVal($_POST['category'] ?? '');
+    $message = cleanVal($_POST['message'] ?? '');
+    $rate = cleanVal($_POST['lot-rate'] ?? '');
+    $step = cleanVal($_POST['lot-step'] ?? '');
+    $date = cleanVal($_POST['lot-date'] ?? '');
 }
 
 // список категорий

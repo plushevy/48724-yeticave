@@ -9,7 +9,7 @@
             <?php foreach ($categories as $category) : ?>
                 <li class="promo__item promo__item--boards">
                     <a class="promo__link"
-                       href="pages/all-lots.html?id=<?= $category['id']; ?>"><?= htmlspecialchars($category['name']); ?></a>
+                       href="all-lots.php?id=<?= $category['id']; ?>"><?= htmlspecialchars($category['name']); ?></a>
                 </li>
             <?php endforeach; ?>
         </ul>
