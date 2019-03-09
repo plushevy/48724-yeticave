@@ -23,14 +23,14 @@ $sqlWinners = "
 $winnersData = dbGetData($link, $sqlWinners, []);
 
 
+// отправляем email победителю
+$transport = new Swift_SmtpTransport("phpdemo.ru", 25);
+$transport->setUsername("keks@phpdemo.ru");
+$transport->setPassword("htmlacademy");
+
 foreach ($winnersData as $data) {
 
     $userEmail = $data['winner_email'];
-
-    // отправляем email победителю
-    $transport = new Swift_SmtpTransport("phpdemo.ru", 25);
-    $transport->setUsername("keks@phpdemo.ru");
-    $transport->setPassword("htmlacademy");
 
     $mailer = new Swift_Mailer($transport);
 
