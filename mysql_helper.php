@@ -22,10 +22,14 @@ function prepareStmt($link, $sql, $data = [])
 
             if (is_int($value)) {
                 $type = 'i';
-            } else if (is_string($value)) {
-                $type = 's';
-            } else if (is_double($value)) {
-                $type = 'd';
+            } else {
+                if (is_string($value)) {
+                    $type = 's';
+                } else {
+                    if (is_double($value)) {
+                        $type = 'd';
+                    }
+                }
             }
 
             if ($type) {
@@ -87,7 +91,8 @@ function dbInsertData($link, $sql, $data = [])
  * Показ ошибки и остановка скрипта
  * @param resource $link Ресурс соединения mysqli
  */
-function showError($link){
+function showError($link)
+{
 
     $error = mysqli_error($link);
     print("Ошибка: Невозможно выполнить запрос к БД. " . $error);
@@ -102,7 +107,8 @@ function showError($link){
  * @param resource $stmt Подготовленное SQL выражение
  * @return mysqli_result
  */
-function mysqliGetResult($link, $stmt) {
+function mysqliGetResult($link, $stmt)
+{
     $res = mysqli_stmt_get_result($stmt);
     if (!$res) {
         showError($link);

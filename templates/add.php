@@ -37,7 +37,9 @@ $itemErrClass = 'form__item--invalid';
                     <option value="">Выберите категорию</option>
                     <?php foreach ($categories as $category) : ?>
                         <option
-                            value="<?= $category['id']; ?>" <?php if ($selectedCategory && $selectedCategory == $category['id']) echo "selected"; ?> >
+                            value="<?= $category['id']; ?>" <?php if ($selectedCategory && $selectedCategory == $category['id']) {
+                            echo "selected";
+                        } ?> >
                             <?= $category['name']; ?>
                         </option>
                     <?php endforeach; ?>

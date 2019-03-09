@@ -8,8 +8,8 @@ if (!isset($categoryId)) {
     showError404();
 }
 
-$categoryId = (int) $categoryId;
-$currentPage = (int) ($_GET['page'] ?? 1);
+$categoryId = (int)$categoryId;
+$currentPage = (int)($_GET['page'] ?? 1);
 $items = [];
 $pages = [1];
 $pageItems = 9;
@@ -36,7 +36,6 @@ $offset = ($currentPage - 1) * $pageItems;
 $pages = range(1, $pagesCount);
 
 
-
 // запрос для получения списка новых лотов
 $sqlGetLots = "
                 SELECT l.id,
@@ -56,8 +55,6 @@ $sqlGetLots = "
                 LIMIT {$pageItems} OFFSET {$offset}";
 
 $items = dbGetData($link, $sqlGetLots, [$categoryId]);
-
-
 
 
 // запрос для получения списка катеорий
@@ -101,7 +98,7 @@ $layoutContent = renderTemplate(
         'navCategories' => $navCategories,
         'isAuth' => $isAuth,
         'userName' => $userName,
-        'title' => 'Yeticave | Поиск'
+        'title' => 'Yeticave | ' . $categoryName
     ]);
 
 print($layoutContent);

@@ -1270,3 +1270,29 @@ input:invalid .form__error{
 .rates__item--end {
   opacity: 0.4;
 }
+
+
+/*custom*/
+.history--mybets,
+.history--mybets table {
+  width: 100%;
+}
+
+.history--mybets td,
+.history--mybets th{
+   width: auto;
+   padding: 20px 0px;
+   max-width: unset;
+   white-space: nowrap;
+   word-break: keep-all;
+
+ }
+
+.history--mybets td:first-of-type,
+.history--mybets th:first-of-type{
+  width: 40%;
+}
+
+.history__item--win {
+  outline: 1px solid red;
+}

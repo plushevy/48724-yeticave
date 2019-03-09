@@ -1,6 +1,7 @@
 <?php
 
 require_once('init.php');
+require_once('getwinner.php');
 
 // запрос для получения списка новых лотов
 $sqlGetLots = "
@@ -44,11 +45,11 @@ $mainPageContent = renderTemplate(
 $layoutContent = renderTemplate(
     'layout.php',
     [
-    'content' => $mainPageContent,
-    'navCategories' => $navCategories,
-    'isAuth' => $isAuth,
-    'userName' => $userName,
-    'title' => 'Yeticave | Главная страница'
+        'content' => $mainPageContent,
+        'navCategories' => $navCategories,
+        'isAuth' => $isAuth,
+        'userName' => $userName,
+        'title' => 'Yeticave | Главная страница'
     ]);
 
 print($layoutContent);

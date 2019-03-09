@@ -29,18 +29,20 @@ $itemErrClass = 'form__item--invalid';
                             <span class="lot-item__cost"><?= formatPrice($lot['price']); ?></span>
                         </div>
                         <div class="lot-item__min-cost">
-                            Мин. ставка <span><?=$minBet;?></span>
+                            Мин. ставка <span><?= $minBet; ?></span>
                         </div>
                     </div>
 
                     <?php if ($showAddBet) : ?>
-                        <form class="lot-item__form" action="lot.php?id=<?=$lotId;?>" method="post">
-                            <p class="lot-item__form-item form__item <?php if ($costErr) {echo $itemErrClass;} ?>">
+                        <form class="lot-item__form" action="lot.php?id=<?= $lotId; ?>" method="post">
+                            <p class="lot-item__form-item form__item <?php if ($costErr) {
+                                echo $itemErrClass;
+                            } ?>">
                                 <label for="cost">Ваша ставка</label>
-                                <input id="cost" type="text" name="cost" value="<?=$minBet;?>"
-                                       placeholder="<?= $minBet;?>">
-                                <input id="lot-id" type="hidden" name="id" value="<?=$lotId;?>">
-                                <span class="form__error"><?=$costErr;?></span>
+                                <input id="cost" type="text" name="cost" value="<?= $minBet; ?>"
+                                       placeholder="<?= $minBet; ?>">
+                                <input id="lot-id" type="hidden" name="id" value="<?= $lotId; ?>">
+                                <span class="form__error"><?= $costErr; ?></span>
                             </p>
                             <button type="submit" class="button">Сделать ставку</button>
                         </form>

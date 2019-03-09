@@ -1,0 +1,13 @@
+{
+    "name": "plue/48724-yeticave",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Ilia",
+            "email": "plue@inbox.ru"
+        }
+    ],
+    "require": {
+        "swiftmailer/swiftmailer": "^6.0"
+    }
+}
