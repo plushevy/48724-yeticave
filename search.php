@@ -3,7 +3,7 @@
 require_once('init.php');
 
 $search = cleanVal($_GET['search'] ?? '');
-$currentPage = (int) ($_GET['page'] ?? 1);
+$currentPage = (int)($_GET['page'] ?? 1);
 $items = [];
 $pages = [1];
 $pageItems = 9;
@@ -20,14 +20,13 @@ if ($search) {
         WHERE l.dt_end > CURDATE() AND  MATCH (label, description) AGAINST(? IN BOOLEAN MODE)";
 
     $itemsCount = dbGetData($link, $sqlGetCount, [$search]);
-    $itemsCount = (int) ($itemsCount[0]['cnt'] ?? '');
+    $itemsCount = (int)($itemsCount[0]['cnt'] ?? '');
 
     //вычисляем смещение и кол-во страниц
     $pagesCount = ceil($itemsCount / $pageItems);
     $offset = ($currentPage - 1) * $pageItems;
 
     $pages = range(1, $pagesCount);
-
 
 
     // запрос для получения списка новых лотов

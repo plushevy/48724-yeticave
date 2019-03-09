@@ -1,10 +1,9 @@
-
 <main>
-    <?=$navCategories; ?>
+    <?= $navCategories; ?>
 
     <div class="container">
         <section class="lots">
-            <h2>Все лоты в категории <span>«<?=$categoryName?>»</span></h2>
+            <h2>Все лоты в категории <span>«<?= $categoryName ?>»</span></h2>
 
             <ul class="lots__list">
                 <!--этот список из массива с товарами-->
@@ -34,7 +33,7 @@
 
         </section>
 
-        <?=$pagination;?>
+        <?= $pagination; ?>
 
     </div>
 </main>

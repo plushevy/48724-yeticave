@@ -11,7 +11,7 @@ if (!$isAuth) {
 
 
 define('MAX_FILE_SIZE', 2 * 1024 * 1024); // 2mb
-define('UPLOAD_IMG_DIR' , './img/');
+define('UPLOAD_IMG_DIR', './img/');
 
 
 $errors = [];
@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (in_array($field, $numericFields) && !empty($value)) {
 
             $filter_options = array(
-                'options' => array( 'min_range' => 0)
+                'options' => array('min_range' => 0)
             );
 
             if (!filter_var($value, FILTER_VALIDATE_INT, $filter_options)) {
@@ -113,10 +113,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $label = cleanVal($_POST['lot-name']);
             $desc = cleanVal($_POST['message']);
             $imgUrl = $pathToFile;
-            $startPrice = (int) $_POST['lot-rate'];
-            $betStep = (int) $_POST['lot-step'];
+            $startPrice = (int)$_POST['lot-rate'];
+            $betStep = (int)$_POST['lot-step'];
             $idUser = $userId;  // id из SESSION
-            $idCategory = (int) $_POST['category'];
+            $idCategory = (int)$_POST['category'];
 
 
             // проверка на наличие категории
@@ -130,7 +130,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $sql = " INSERT INTO lots (dt_end, label, description, img_url, start_price, bet_step, id_user, id_category) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-            $newLotId = dbInsertData($link, $sql, [$dt_end, $label, $desc, $imgUrl, $startPrice, $betStep, $idUser, $idCategory]);
+            $newLotId = dbInsertData($link, $sql,
+                [$dt_end, $label, $desc, $imgUrl, $startPrice, $betStep, $idUser, $idCategory]);
 
             header("Location: lot.php?id=" . $newLotId);
             die;

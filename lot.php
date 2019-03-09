@@ -16,11 +16,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         die;
     }
 
-    $lotId = (int) ($_POST['id'] ?? '');
+    $lotId = (int)($_POST['id'] ?? '');
 
 } else {
 
-    $lotId = (int) ($_GET['id'] ?? '');
+    $lotId = (int)($_GET['id'] ?? '');
 }
 
 if (!isset($lotId)) {
@@ -74,8 +74,8 @@ $minBet = $lot['price'] + $lot['bet_step'];
 $lotAuthor = $lot['id_user'];
 $lotEndDt = $lot['dt_end'];
 $isBetAuthor = false;
-foreach ( $bets as $bet) {
-    if ($bet['id_user'] == $userId){
+foreach ($bets as $bet) {
+    if ($bet['id_user'] == $userId) {
         $isBetAuthor = true;
         break;
     }
