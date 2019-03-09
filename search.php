@@ -20,7 +20,7 @@ if ($search) {
         WHERE l.dt_end > CURDATE() AND  MATCH (label, description) AGAINST(? IN BOOLEAN MODE)";
 
     $itemsCount = dbGetData($link, $sqlGetCount, [$search]);
-    $itemsCount = (int)($itemsCount[0]['cnt'] ?? '');
+    $itemsCount = (int)$itemsCount[0]['cnt'];
 
     //вычисляем смещение и кол-во страниц
     $pagesCount = ceil($itemsCount / $pageItems);
