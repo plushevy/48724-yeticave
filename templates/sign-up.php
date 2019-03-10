@@ -4,7 +4,7 @@ $nameErr = $errors['name'] ?? '';
 $emailErr = $errors['email'] ?? '';
 $messageErr = $errors['message'] ?? '';
 $passwordErr = $errors['password'] ?? '';
-$fileErr = $errors['avatar'] ?? '';
+$fileErr = $errors['image'] ?? '';
 
 $formErrClass = (!empty($errors)) ? 'form--invalid' : '';
 $itemErrClass = 'form__item--invalid';
@@ -61,7 +61,7 @@ $pathToFile = $pathToFile ?? 'img/avatar.jpg';
                 </div>
             </div>
             <div class="form__input-file">
-                <input class="visually-hidden" type="file" name="avatar" id="photo2" value="">
+                <input class="visually-hidden" type="file" name="image" id="photo2" value="">
                 <label for="photo2">
                     <span>+ Добавить</span>
                 </label>

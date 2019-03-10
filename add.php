@@ -10,13 +10,7 @@ if (!$isAuth) {
 }
 
 
-define('MAX_FILE_SIZE', 2 * 1024 * 1024); // 2mb
-define('UPLOAD_IMG_DIR', './img/');
-
-
 $errors = [];
-
-$allowTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/webp'];
 
 $requiredFields = [
     'lot-name',
@@ -85,34 +79,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Если все поля проверены - переходим к загрузке файла
     if ($isValidRequiredFields && isset($_FILES['image'])) {
 
-        $img = $_FILES['image'];
 
-        $fileName = $img['name'];
-        $fileSize = $img['size'];
-        $fileType = $img['type'];
-        $fileTmpName = $img['tmp_name'];
-
-        if (!in_array($fileType, $allowTypes)) {
-            $errors['image'] = "Загрузите картинку в формате jpg, jpeg, png, webp";
-        }
-
-        if ($fileSize == 0 || $fileSize > MAX_FILE_SIZE || $_FILES['image']['error'] !== UPLOAD_ERR_OK) {
-            $errors['image'] = "Загрузите картинку размером до 2Mb";
-        }
+        $imgUrl = validateFile($_FILES['image'],$errors);
 
         // Если нет ошибок и файл загружен, отправляем данные в БД
-        if (!count($errors)) {
-
-            $ext = getExtensionFromMime($fileType);
-            $newFileName = uniqid() . '.' . $ext;
-            $pathToFile = UPLOAD_IMG_DIR . $newFileName;
-            move_uploaded_file($fileTmpName, $pathToFile);
+        if (!count($errors) && $imgUrl) {
 
             // готовим данные для отправки
             $dt_end = dateToTimestamp(cleanVal($_POST['lot-date']));
             $label = cleanVal($_POST['lot-name']);
             $desc = cleanVal($_POST['message']);
-            $imgUrl = $pathToFile;
             $startPrice = (int)$_POST['lot-rate'];
             $betStep = (int)$_POST['lot-step'];
             $idUser = $userId;  // id из SESSION

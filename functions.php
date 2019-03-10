@@ -251,6 +251,48 @@ function validateEndDate($str)
 
 
 /**
+ * Проверка файла для загрузки
+ * Возвращает или false или путь до файла
+ * @param array $file
+ * @param array $errors
+ * @param string $errName
+ * @param array $allowTypes
+ * @return bool|string
+ */
+function validateFile($file, &$errors, $errName = 'image', $allowTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/webp']){
+
+    define('MAX_FILE_SIZE', 2 * 1024 * 1024); // 2mb
+    define('UPLOAD_IMG_DIR', './img/');
+
+    $fileName = $file['name'];
+    $fileSize = $file['size'];
+    $fileType = $file['type'];
+    $fileTmpName = $file['tmp_name'];
+
+    if (!in_array($fileType, $allowTypes)) {
+        $errors[$errName] = "Загрузите картинку в формате jpg, jpeg, png, webp";
+        return false;
+    }
+
+    if ($fileSize > MAX_FILE_SIZE || $file['error'] !== UPLOAD_ERR_OK) {
+        $errors[$errName] = "Загрузите картинку размером до 2Mb";
+        return false;
+    }
+
+    if (count($errors)) {
+        return false;
+    }
+
+    $ext = getExtensionFromMime($fileType);
+    $newFileName = uniqid() . '.' . $ext;
+    $pathToFile = UPLOAD_IMG_DIR . $newFileName;
+    move_uploaded_file($fileTmpName, $pathToFile);
+
+    return $pathToFile;
+}
+
+
+/**
  * Временная ф-ция для дебага
  * @param mixed $arr
  */
