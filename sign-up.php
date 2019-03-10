@@ -17,7 +17,7 @@ $name = '';
 $email = '';
 $message = '';
 $password = '';
-$pathToFile = false;
+$pathToFile = null;
 
 $isValidRequiredFields = false;
 
@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $isValidRequiredFields = empty($errors);
 
     // Если все поля проверены - переходим к проверка файла, если он есть, иначе  - img/avatar.jpg
-    if ($isValidRequiredFields && isset($_FILES['image']) && $_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE) {
+    if ($isValidRequiredFields && isset($_FILES['image'])) {
 
         // проверяем файл и загружаем
         $pathToFile = validateFile($_FILES['image'],$errors);
@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
     // Если нет ошибок
-    if (!count($errors) && $pathToFile) {
+    if (!count($errors)) {
 
         $addUserSql = "INSERT INTO users 
                           (email, name, password, contacts, img_url) 
