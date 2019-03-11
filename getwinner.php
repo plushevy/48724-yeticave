@@ -16,7 +16,7 @@ $sqlWinners = "
                        JOIN bets b ON b.id_lot = l.id
                        JOIN categories c ON c.id = l.id_category
                        JOIN users u ON u.id = b.id_user
-                WHERE l.id_winner IS NULL AND l.dt_end <= CURDATE()
+                WHERE l.id_winner IS NULL AND l.dt_end <= CURDATE()rfrj
                 ORDER BY b.dt_create DESC";
 
 $winnersData = dbGetData($link, $sqlWinners, []);
