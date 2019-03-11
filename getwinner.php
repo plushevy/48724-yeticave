@@ -17,7 +17,6 @@ $sqlWinners = "
                        JOIN categories c ON c.id = l.id_category
                        JOIN users u ON u.id = b.id_user
                 WHERE l.id_winner IS NULL AND l.dt_end <= CURDATE()
-                GROUP BY l.id
                 ORDER BY b.dt_create DESC";
 
 $winnersData = dbGetData($link, $sqlWinners, []);
