@@ -1,7 +1,7 @@
 <?php
 
 require_once('init.php');
-require_once('getwinner.php');
+//require_once('getwinner.php');
 
 // запрос для получения списка новых лотов
 $sqlGetLots = "

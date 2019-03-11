@@ -6,16 +6,16 @@ $sqlWinners = "
                        l.label as name,
                        l.img_url as image,
                        l.dt_end,
-                       b.last_price as final_price,
+                       max(b.last_price) as final_price,
                        b.dt_create as dt_bet,
                        c.name as category,
                        u.id as winner_id,
                        u.name as winner_name,
                        u.email as winner_email
                 FROM lots l
-                       JOIN bets b ON b.id_lot = l.id
-                       JOIN categories c ON c.id = l.id_category
-                       JOIN users u ON u.id = b.id_user
+                  JOIN bets b ON b.id_lot = l.id
+                  JOIN categories c ON c.id = l.id_category
+                  JOIN users u ON u.id = b.id_user
                 WHERE l.id_winner IS NULL AND l.dt_end <= CURDATE()
                 GROUP BY l.id
                 ORDER BY b.dt_create DESC";

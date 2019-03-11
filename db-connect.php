@@ -1,6 +1,7 @@
 <?php
 
-$link = mysqli_connect("localhost", "root", "root", "yeticave_db");
+$link = mysqli_connect("localhost", "root", "", "yeticave_db");
+mysqli_set_charset($link, "utf8");
 
 if ($link == false) {
 

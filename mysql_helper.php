@@ -79,8 +79,7 @@ function dbGetData($link, $sql, $data = [])
 function dbInsertData($link, $sql, $data = [])
 {
     $stmt = prepareStmt($link, $sql, $data); // подготавливаем выражение
-    mysqli_stmt_execute($stmt);
-    mysqliGetResult($link, $stmt);
+    mysqliExecuteStmr($link, $stmt);
     $id = mysqli_insert_id($link);
 
     return $id;
@@ -110,6 +109,23 @@ function showError($link)
 function mysqliGetResult($link, $stmt)
 {
     $res = mysqli_stmt_get_result($stmt);
+
+    if (!$res) {
+        showError($link);
+    }
+    return $res;
+}
+
+/**
+ * Обертка mysqli_stmt_execute с выводом ошибки
+ * @param resource $link Ресурс соединения mysqli
+ * @param resource $stmt Подготовленное SQL выражение
+ * @return mysqli_result
+ */
+function mysqliExecuteStmr($link, $stmt)
+{
+    $res = mysqli_stmt_execute($stmt);
+
     if (!$res) {
         showError($link);
     }
