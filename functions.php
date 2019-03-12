@@ -54,17 +54,6 @@ function showTimeLeft($endTime = 'tomorrow')
 
     date_default_timezone_set('Europe/Moscow');
 
-//    $dtNow = date_create('now');
-//    $dtEnd = date_create($endTime);
-//    $timeLeft = '00:00';
-//    // показываем только если лот не закрыт
-//    if ($dtEnd > $dtNow) {
-//        $interval = date_diff($dtNow, $dtEnd);
-//        $timeLeft = date_interval_format($interval, '%H:%I');
-//    }
-//
-//    return $timeLeft;
-
     $timestamp1 = strtotime('now');
     $timestamp2 = strtotime($endTime);
     $timeLeft = $timestamp2 - $timestamp1;
@@ -102,24 +91,27 @@ function setEnding($number, array $variants)
 
     $num1 = $number % 100;
     $num2 = $number % 10;
+    $result = ' ';
 
     if ($num1 >= 11 && $num1 <= 14) {
-        return ' ' . $variants[2];
+
+        $result .= $variants[2];
+
+    } else {
+
+        switch ($num2) {
+            case '1':
+                $result .= $variants[0];
+            case '2':
+            case '3':
+            case '4':
+                $result .= $variants[1];
+            default:
+                $result .= $variants[2];
+        }
     }
 
-    switch ($num2) {
-        case '1':
-            return ' ' . $variants[0];
-        case '2':
-        case '3':
-        case '4':
-            return ' ' . $variants[1];
-        default:
-            return ' ' . $variants[2];
-    }
-
-    return $variants[2];
-
+    return $result;
 }
 
 
@@ -192,23 +184,25 @@ function checkEndDate($str)
 
     date_default_timezone_set('Europe/Moscow');
 
-    // $pattern = '/^\d{2}\.\d{2}\.\d{4}$/';
-    $pattern = '/^\d{4}-\d{2}-\d{2}$/';
+    $pattern = '/^\d{2}\.\d{2}\.\d{4}$/';
+    $isValid = false;
 
-    if (!preg_match($pattern, $str)) {
-        return false;
+    if (preg_match($pattern, $str)) {
+
+        $now = strtotime('now');
+        $endDt = strtotime($str . ' 23:59:59');
+        $secsinMin = 60;
+        $secsInHour = $secsinMin * 60;
+        $secsInDay = $secsInHour * 24;
+
+        $diff = $endDt - $now;
+        $day = floor($diff / $secsInDay);
+
+        $isValid = ($day >= 1);
+
     }
 
-    $now = strtotime('now');
-    $endDt = strtotime($str . ' 23:59:59');
-    $secsinMin = 60;
-    $secsInHour = $secsinMin * 60;
-    $secsInDay = $secsInHour * 24;
-
-    $diff = $endDt - $now;
-    $day = floor($diff / $secsInDay);
-
-    return $day >= 1;
+    return $isValid;
 }
 
 
@@ -219,7 +213,6 @@ function checkEndDate($str)
  */
 function dateToTimestamp($str)
 {
-    ;
     $dt = date_create($str);
     return date_format($dt, "Y-m-d 23:59:59");
 }
@@ -264,44 +257,25 @@ function validateFile($file, &$errors, $errName = 'image', $allowTypes = ['image
     define('MAX_FILE_SIZE', 2 * 1024 * 1024); // 2mb
     define('UPLOAD_IMG_DIR', './img/');
 
-    $fileName = $file['name'];
     $fileSize = $file['size'];
-    $fileType = $file['type'];
     $fileTmpName = $file['tmp_name'];
+    $fileType = ($fileTmpName) ? mime_content_type($fileTmpName) : '';
+    $pathToFile = false;
 
     if (!in_array($fileType, $allowTypes)) {
         $errors[$errName] = "Загрузите картинку в формате jpg, jpeg, png, webp";
-        return false;
     }
 
     if ($fileSize > MAX_FILE_SIZE || $file['error'] !== UPLOAD_ERR_OK) {
         $errors[$errName] = "Загрузите картинку размером до 2Mb";
-        return false;
     }
 
-    if (count($errors)) {
-        return false;
+    if (!count($errors)) {
+        $ext = getExtensionFromMime($fileType);
+        $newFileName = uniqid() . '.' . $ext;
+        $pathToFile = UPLOAD_IMG_DIR . $newFileName;
+        move_uploaded_file($fileTmpName, $pathToFile);
     }
-
-    $ext = getExtensionFromMime($fileType);
-    $newFileName = uniqid() . '.' . $ext;
-    $pathToFile = UPLOAD_IMG_DIR . $newFileName;
-    move_uploaded_file($fileTmpName, $pathToFile);
 
     return $pathToFile;
 }
-
-
-/**
- * Временная ф-ция для дебага
- * @param mixed $arr
- */
-function debug($arr)
-{
-    echo "<pre>";
-    var_dump($arr);
-    echo "</pre>";
-    die;
-}
-
-

@@ -4,8 +4,6 @@ require_once('init.php');
 
 $errors = [];
 
-$allowTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/webp'];
-
 $requiredFields = [
     'name',
     'email',
@@ -17,7 +15,7 @@ $name = '';
 $email = '';
 $message = '';
 $password = '';
-$pathToFile = null;
+$pathToFile = '';
 
 $isValidRequiredFields = false;
 
@@ -67,11 +65,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $isValidRequiredFields = empty($errors);
 
     // Если все поля проверены - переходим к проверка файла, если он есть, иначе  - img/avatar.jpg
-    if ($isValidRequiredFields && isset($_FILES['image'])) {
+    if ($isValidRequiredFields && isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
 
         // проверяем файл и загружаем
-        $pathToFile = validateFile($_FILES['image'],$errors);
-
+        $pathToFile = validateFile($_FILES['image'], $errors);
     }
 
     // готовим данные для отправки

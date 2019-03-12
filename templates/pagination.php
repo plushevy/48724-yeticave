@@ -7,7 +7,7 @@
         <?php endif; ?>
 
         <?php foreach ($pages as $page): ?>
-            <li class="pagination__item <?php if ($page == $currentPage): ?>pagination-item-active<?php endif; ?>">
+            <li class="pagination__item <?php if ($page === $currentPage): ?>pagination-item-active<?php endif; ?>">
                 <a href="/<?= $linkParam; ?>page=<?= $page; ?>"><?= $page; ?></a>
             </li>
         <?php endforeach; ?>

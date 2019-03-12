@@ -11,12 +11,23 @@ if (!$isAuth) {
 
 
 $sqlGetMyBets = "
-                SELECT l.id as lot_id, l.label as name, b.last_price as price, b.dt_create, u.name as lot_author, u.contacts as lot_author_contacts, l.id_winner
+                SELECT
+                  l.id as lot_id,
+                  l.label as name,
+                  l.img_url as image,
+                  l.dt_end,
+                  l.id_winner,
+                  b.last_price as price,
+                  b.dt_create,
+                  u.name as lot_author,
+                  u.contacts as lot_author_contacts,
+                  c.name as category
                 FROM bets b
-                JOIN lots l ON b.id_lot = l.id
-                JOIN users u ON l.id_user = u.id
+                  JOIN lots l ON b.id_lot = l.id
+                  JOIN users u ON l.id_user = u.id
+                  JOIN categories c ON l.id_category = c.id
                 WHERE b.id_user = ?
-                ORDER BY b.dt_create DESC";
+                ORDER BY b.dt_create DESC;";
 
 $myBets = dbGetData($link, $sqlGetMyBets, [$userId]);
 
