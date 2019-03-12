@@ -7,7 +7,7 @@ $cost = '';
 $showAddBet = false;
 
 // в POST проверяем авторизацию и id , в GET - id
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (!$isAuth) {
         // незалогиненным нельзя сделать ставку
@@ -75,7 +75,7 @@ $lotAuthor = $lot['id_user'];
 $lotEndDt = $lot['dt_end'];
 $isBetAuthor = false;
 foreach ($bets as $bet) {
-    if ($bet['id_user'] == $userId) {
+    if ($bet['id_user'] === $userId) {
         $isBetAuthor = true;
         break;
     }
@@ -87,7 +87,7 @@ if (validateEndDate($lotEndDt) && $isAuth && $userId != $lotAuthor && !$isBetAut
 }
 
 // Если POST проверяем новую ставку
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] ==='POST') {
 
     $cost = cleanVal($_POST['cost'] ?? '');
 

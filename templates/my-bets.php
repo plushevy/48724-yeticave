@@ -1,50 +1,43 @@
-<main>
 
+<main>
     <?= $navCategories; ?>
 
-    <section class="lot-item container">
-        <h2>Список моих ставок</h2>
-        <div class="lot-item__content">
-            <?php if (count($myBets) > 0) : ?>
-                <div class="history history--mybets">
-                    <h3>История ставок (<span><?= count($myBets); ?></span>)</h3>
-                    <table class="history__list">
-                        <tr class="history__item history__item--mybets <?php if ($myWin) {
-                            echo "history__item--win";
-                        } ?>">
-                            <th class="history__name">Предмет</th>
-                            <th class="history__price">Ставка</th>
-                            <th class="history__time">Дата создания</th>
-                            <th class="history__time">Владелец лота</th>
-                            <th class="history__time">Контакты владельца</th>
-                        </tr>
-                        <?php foreach ($myBets as $bet) : ?>
-                            <?php
-                            $myWin = false;
-                            if ($bet['id_winner'] == $userId) {
-                                $myWin = true;
-                            }
-                            ?>
-                            <tr class="history__item <?php if ($myWin) {
-                                echo "history__item--win";
-                            } ?>">
-                                <td class="history__name"><a
-                                        href="/lot.php?id=<?= $bet['lot_id']; ?>"><?= $bet['name']; ?></a></td>
-                                <td class="history__price"><?= formatPrice($bet['price']); ?></td>
-                                <td class="history__time"><?= customTimeLeft($bet['dt_create']); ?></td>
-                                <td class="history__time"><?= $bet['lot_author']; ?></td>
-                                <td class="history__time"><?= $bet['lot_author_contacts']; ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </table>
-                </div>
-            <?php else: ?>
+    <section class="rates container">
 
-                <div class="history">
-                    <h3>У вас не было ни одной ставки...</h3>
-                </div>
+            <h2>Мои ставки</h2>
+            <table class="rates__list">
 
-            <?php endif; ?>
-        </div>
+                <?php foreach ($myBets as $bet) : ?>
+                    <?php $myWin = ($bet['id_winner'] === $userId); ?>
+
+                    <tr class="rates__item <?php if ($myWin) { echo "rates__item--win"; } ?>">
+                        <td class="rates__info">
+                            <div class="rates__img">
+                                <img src="<?= $bet['image']; ?>" width="54" height="40" alt="<?= $bet['name']; ?>">
+                            </div>
+                            <h3 class="rates__title">
+                                <a href="/lot.php?id=<?= $bet['lot_id']; ?>"><?= $bet['name']; ?></a>
+                                <p><?= $bet['lot_author_contacts']; ?></p>
+                            </h3>
+                        </td>
+                        <td class="rates__category"><?= $bet['category']; ?><td>
+                        <td class="rates__timer">
+
+                            <?php if ($myWin) : ?>
+                                <div class="timer timer--win">Ставка выиграла</div>
+                            <? else : ?>
+                                <div class="timer timer--finishing"> <?= showTimeLeft($bet['dt_end']); ?></div>
+                            <?php endif; ?>
+
+                        </td>
+
+                        <td class="rates__price"><?= formatPrice($bet['price']); ?></td>
+                        <td class="rates__time"><?= customTimeLeft($bet['dt_create']) ?></td>
+                    </tr>
+
+                <?php endforeach; ?>
+
+            </table>
+
     </section>
 </main>

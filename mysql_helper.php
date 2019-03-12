@@ -22,14 +22,10 @@ function prepareStmt($link, $sql, $data = [])
 
             if (is_int($value)) {
                 $type = 'i';
-            } else {
-                if (is_string($value)) {
-                    $type = 's';
-                } else {
-                    if (is_double($value)) {
-                        $type = 'd';
-                    }
-                }
+            } else if (is_string($value)) {
+                $type = 's';
+            } else if (is_double($value)) {
+                $type = 'd';
             }
 
             if ($type) {
@@ -79,7 +75,7 @@ function dbGetData($link, $sql, $data = [])
 function dbInsertData($link, $sql, $data = [])
 {
     $stmt = prepareStmt($link, $sql, $data); // подготавливаем выражение
-    mysqliExecuteStmr($link, $stmt);
+    mysqliExecuteStmt($link, $stmt);
     $id = mysqli_insert_id($link);
 
     return $id;
@@ -122,7 +118,7 @@ function mysqliGetResult($link, $stmt)
  * @param resource $stmt Подготовленное SQL выражение
  * @return mysqli_result
  */
-function mysqliExecuteStmr($link, $stmt)
+function mysqliExecuteStmt($link, $stmt)
 {
     $res = mysqli_stmt_execute($stmt);
 

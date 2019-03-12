@@ -10,7 +10,6 @@ $fileErr = $errors['image'] ?? '';
 
 $formErrClass = (!empty($errors)) ? 'form--invalid' : '';
 $itemErrClass = 'form__item--invalid';
-
 ?>
 
 <main>
@@ -36,8 +35,9 @@ $itemErrClass = 'form__item--invalid';
                 <select id="category" name="category" required>
                     <option value="">Выберите категорию</option>
                     <?php foreach ($categories as $category) : ?>
+
                         <option
-                            value="<?= $category['id']; ?>" <?php if ($selectedCategory && $selectedCategory == $category['id']) {
+                            value="<?= $category['id']; ?>" <?php  if ($selectedCategory && (int) $selectedCategory === $category['id']) {
                             echo "selected";
                         } ?> >
                             <?= $category['name']; ?>

@@ -40,7 +40,6 @@ $categories = dbGetData($link, $sqlGetCategories);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-
     foreach ($_POST as $field => $value) {
 
         $value = cleanVal($value);
@@ -48,16 +47,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (in_array($field, $requiredFields) && empty($value)) {
             $errors[$field] = 'Заполните это поле';
         }
-        if ($field == 'category' && empty($value)) {
+
+        if ($field === 'category' && empty($value)) {
             $errors[$field] = 'Выберите категорию';
         }
 
-        if ($field == "message" && strlen($value) < 10) {
+        if  ($field === 'category' && !empty($value)){
+            // проверка на наличия такой категории
+            $category = (int) $value;
+            $sqlCheckCategory = "SELECT * FROM categories WHERE id = ?";
+            $isCategoryExists = dbGetData($link, $sqlCheckCategory, [$category]);
+            if (!$isCategoryExists) {
+                $errors[$field] = 'Ошибка категории';
+            }
+        }
+
+        if ($field === "message" && strlen($value) < 10) {
             $errors[$field] = "Описание должно быть не менее 10 символов";
         }
 
-        if ($field == "lot-date" && !checkEndDate($value)) {
-            $errors[$field] = "Дата (мм/дд/гггг) больше текушей минимум на 1 день";
+        if ($field === "lot-date" && !checkEndDate($value)) {
+            $errors[$field] = "Дата (дд.мм.гггг) больше текушей минимум на 1 день";
         }
 
         // проверка на положительные числа
@@ -93,14 +103,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $betStep = (int)$_POST['lot-step'];
             $idUser = $userId;  // id из SESSION
             $idCategory = (int)$_POST['category'];
-
-
-            // проверка на наличие категории
-            $sqlCheckCategory = "SELECT * FROM categories WHERE id = ?";
-            $isCategoryExists = dbGetData($link, $sqlCheckCategory, [$idCategory]);
-            if (!$isCategoryExists) {
-                die ('Ошибка. Нет такой категории');
-            }
 
 
             $sql = " INSERT INTO lots (dt_end, label, description, img_url, start_price, bet_step, id_user, id_category) 
