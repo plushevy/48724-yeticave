@@ -1,27 +1,31 @@
 <?php
 
-
 $sqlWinners = "
-                SELECT l.id as lot_id,
-                       l.label as name,
-                       l.img_url as image,
-                       l.dt_end,
-                       max(b.last_price) as final_price,
-                       b.dt_create as dt_bet,
-                       c.name as category,
-                       u.id as winner_id,
-                       u.name as winner_name,
-                       u.email as winner_email
-                FROM lots l
-                  JOIN bets b ON b.id_lot = l.id
-                  JOIN categories c ON c.id = l.id_category
+                SELECT
+                  l.id as lot_id,
+                  l.label as name,
+                  l.img_url as image,
+                  l.dt_end,
+                  b.last_price as final_price,
+                  b.dt_create as dt_bet,
+                  c.name as category,
+                  u.id as winner_id,
+                  u.name as winner_name,
+                  u.email as winner_email
+                FROM bets b
+                  JOIN (
+                        SELECT
+                          id_lot,
+                          max(last_price) AS max_price
+                        FROM bets
+                        GROUP BY id_lot
+                       ) b1 ON b1.id_lot = b.id_lot AND b1.max_price = b.last_price
                   JOIN users u ON u.id = b.id_user
-                WHERE l.id_winner IS NULL AND l.dt_end <= CURDATE()
-                GROUP BY l.id
-                ORDER BY b.dt_create DESC";
+                  JOIN lots l ON l.id = b.id_lot
+                  JOIN categories c ON c.id = l.id_category
+                WHERE l.id_winner IS NULL AND l.dt_end <= CURDATE();";
 
 $winnersData = dbGetData($link, $sqlWinners, []);
-
 
 // отправляем email победителю
 $transport = new Swift_SmtpTransport("phpdemo.ru", 25);
