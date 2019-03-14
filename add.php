@@ -38,7 +38,7 @@ $sqlGetCategories = "SELECT * FROM categories";
 $categories = dbGetData($link, $sqlGetCategories);
 
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     foreach ($_POST as $field => $value) {
 

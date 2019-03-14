@@ -20,7 +20,7 @@ $pathToFile = '';
 $isValidRequiredFields = false;
 
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $name = cleanVal($_POST['name'] ?? '');
     $email = cleanVal($_POST['email'] ?? '');
@@ -36,19 +36,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errors[$field] = 'Заполните это поле';
         }
 
-        if ($field == "password" && strlen($value) < 8) {
+        if ($field === "password" && strlen($value) < 8) {
             $errors[$field] = "Пароль должен быть не меньше 8 символов";
         }
 
-        if ($field == "message" && strlen($value) < 10) {
+        if ($field === "message" && strlen($value) < 10) {
             $errors[$field] = "Напишите как с вами связаться. Не менее 10 символов";
         }
 
-        if ($field == "email" && !filter_var($value, FILTER_VALIDATE_EMAIL)) {
+        if ($field === "email" && !filter_var($value, FILTER_VALIDATE_EMAIL)) {
             $errors[$field] = "Введите валидный email";
         }
 
-        if ($field == "email" && !isset($errors['email'])) {
+        if ($field === "email" && !isset($errors['email'])) {
 
             // проверка что такого email в БД нет
             $sqlCheckEmail = "SELECT * FROM users WHERE email = ?";
